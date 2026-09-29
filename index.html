@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#173b8f">
+  <title>CIRCUIT QUEST</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <div class="brand">CIRCUIT QUEST</div>
+      <div class="subtitle">Trò chơi lắp mạch điện ảo</div>
+    </div>
+    <div id="status" class="status-pill">Sẵn sàng</div>
+  </header>
+
+  <main class="app-shell">
+    <section class="panel control-panel">
+      <div class="section-title">1. CHỌN MỨC ĐỘ</div>
+      <div class="mode-grid">
+        <button class="mode-btn active easy" data-mode="EASY">DỄ</button>
+        <button class="mode-btn medium" data-mode="MEDIUM">TRUNG BÌNH</button>
+        <button class="mode-btn hard" data-mode="HARD">KHÓ</button>
+      </div>
+      <button id="newMissionBtn" class="primary-btn">⚡ TẠO NHIỆM VỤ</button>
+      <button id="resetBtn" class="secondary-btn">↺ XÓA BÀN &amp; TẠO LẠI</button>
+    </section>
+
+    <section class="layout">
+      <aside class="left-column">
+        <section class="panel mission-panel">
+          <div class="section-title">2. NHIỆM VỤ</div>
+          <div id="missionBox" class="mission-box">
+            <div class="empty-title">CHƯA CÓ NHIỆM VỤ</div>
+            <div class="muted">Chọn DỄ / TRUNG BÌNH / KHÓ rồi bấm TẠO NHIỆM VỤ.</div>
+          </div>
+        </section>
+
+        <section class="panel inventory-panel">
+          <div class="section-title">3. KHO LINH KIỆN</div>
+          <div id="selectionHint" class="selection-hint">Chưa chọn linh kiện.</div>
+          <div class="hint">Bấm một linh kiện để chọn. Bấm linh kiện khác sẽ đổi lựa chọn ngay.</div>
+          <div id="inventory" class="inventory"></div>
+        </section>
+      </aside>
+
+      <section class="panel board-panel">
+        <div class="board-header">
+          <div>
+            <div class="section-title">4. BÀN CHƠI 25 Ô</div>
+            <div id="boardHint" class="hint">Chạm ô trống để đặt linh kiện. Chạm thẻ đã đặt để chọn thẻ đó.</div>
+          </div>
+          <div class="board-actions">
+            <button id="removeBtn" class="small-btn">🗑 GỠ THẺ</button>
+            <button id="clearSelectionBtn" class="small-btn">✕ BỎ CHỌN</button>
+            <button id="checkBtn" class="success-btn">✓ KIỂM TRA MẠCH</button>
+          </div>
+        </div>
+
+        <div id="board" class="board" aria-label="Bàn chơi 25 ô"></div>
+
+        <div class="legend">
+          <span><i class="dot source"></i>Nguồn</span>
+          <span><i class="dot load"></i>Điện trở / đèn</span>
+          <span><i class="dot wire"></i>Dây dẫn</span>
+          <span><i class="dot meter"></i>Đồng hồ</span>
+        </div>
+      </section>
+    </section>
+
+    <section class="panel result-panel">
+      <div class="section-title">5. KẾT QUẢ KIỂM TRA</div>
+      <div id="result" class="result neutral">Chưa kiểm tra.</div>
+    </section>
+
+    <section class="panel help-panel">
+      <details>
+        <summary>Ảnh linh kiện của bạn</summary>
+        <p>Website đã sẵn sàng đọc ảnh riêng của bạn. Đặt ảnh vào <code>assets/cards/</code> với tên <code>A01.png</code> đến <code>A15.png</code>. Mỗi ảnh sẽ tự xuất hiện trong kho và trên thẻ tương ứng.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer class="footer">CIRCUIT QUEST • phiên bản web • không cần Python</footer>
+  <script src="app.js"></script>
+</body>
+</html>
