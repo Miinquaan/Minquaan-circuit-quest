@@ -8,15 +8,45 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <main id="intro" class="welcome">
+    <div class="welcome-copy">
+      <h1>Circuit Quest</h1>
+      <div id="projectIntro"><p>Trò chơi lắp mạch điện bằng thẻ linh kiện. Chơi một mình hoặc chuyền thiết bị để cùng bạn bè hoàn thành nhiệm vụ.</p></div>
+      <button id="tryBtn" class="primary-btn">Chơi thử bản web →</button>
+    </div>
+    <div class="cover-cards" aria-hidden="true"><img src="assets/cards/A01.png" alt=""><img src="assets/cards/A08.png" alt=""><img src="assets/cards/A14.png" alt=""></div>
+  </main>
+  <main id="setup" class="setup-screen" hidden>
+    <section class="panel setup-box">
+      <h1>Chọn số người chơi</h1>
+      <p>Mỗi người nhận 4 thẻ. Các thẻ còn lại tạo thành chồng bài rút chung.</p>
+      <div class="player-options" aria-label="Số người chơi">
+        <button data-players="1" aria-label="1 người chơi">1</button>
+        <button data-players="2" aria-label="2 người chơi">2</button>
+        <button data-players="3" aria-label="3 người chơi">3</button>
+        <button data-players="4" aria-label="4 người chơi">4</button>
+      </div>
+      <button id="backBtn" class="small-btn">← Giới thiệu</button>
+    </section>
+  </main>
+  <section id="handoff" class="setup-screen" hidden>
+    <div class="panel setup-box"><h1 id="handoffTitle"></h1><p>Chuyền thiết bị cho người chơi đến lượt.</p><button id="readyBtn" class="primary-btn">Xem bài của tôi</button></div>
+  </section>
+  <div id="playScreen" hidden>
   <header class="topbar">
     <div>
       <div class="brand">CIRCUIT QUEST</div>
-      <div class="subtitle">Trò chơi lắp mạch điện ảo</div>
+      <div id="turnLabel" class="subtitle" aria-live="polite"></div>
     </div>
     <div id="status" class="status-pill">Sẵn sàng</div>
   </header>
 
   <main class="app-shell">
+    <section class="panel turn-controls">
+      <strong id="pileLabel"></strong>
+      <button id="drawBtn" class="small-btn">Rút 1 thẻ</button>
+      <button id="nextBtn" class="small-btn">Kết thúc lượt →</button>
+    </section>
     <section class="panel control-panel">
       <div class="section-title">1. CHỌN MỨC ĐỘ</div>
       <div class="mode-grid">
@@ -25,7 +55,7 @@
         <button class="mode-btn hard" data-mode="HARD">KHÓ</button>
       </div>
       <button id="newMissionBtn" class="primary-btn">⚡ TẠO NHIỆM VỤ</button>
-      <button id="resetBtn" class="secondary-btn">↺ XÓA BÀN &amp; TẠO LẠI</button>
+      <button id="resetBtn" class="secondary-btn">↺ DỌN BÀN</button>
     </section>
 
     <section class="layout">
@@ -39,7 +69,7 @@
         </section>
 
         <section class="panel inventory-panel">
-          <div class="section-title">3. KHO LINH KIỆN</div>
+          <div class="section-title">3. BÀI TRÊN TAY</div>
           <div id="selectionHint" class="selection-hint">Chưa chọn linh kiện.</div>
           <div class="hint">Kéo hình linh kiện vào một ô, hoặc chọn linh kiện rồi giữ và vuốt trên bàn để đặt vào nhiều ô.</div>
           <div id="inventory" class="inventory"></div>
@@ -83,6 +113,7 @@
     </section>
   </main>
 
+  </div>
   <footer class="footer">CIRCUIT QUEST • phiên bản web • không cần Python</footer>
   <script src="app.js"></script>
 </body>
