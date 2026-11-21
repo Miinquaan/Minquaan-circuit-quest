@@ -30,6 +30,28 @@
     #rules-title{color:#173b8f}
     #luat-choi a,#luat-choi img{display:block}
     #luat-choi img{width:100%;height:auto;cursor:zoom-in}
+    #gioi-thieu{
+      position:relative;isolation:isolate;overflow:hidden;
+      background:#081c46;color:#fff
+    }
+    #gioi-thieu::before{
+      content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+      background:url("assets/ban-choi-nen.png") center 46% / cover no-repeat;
+      mix-blend-mode:luminosity;opacity:.33
+    }
+    #gioi-thieu::after{
+      content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+      background:linear-gradient(90deg,rgba(6,22,58,.76),rgba(8,28,70,.35) 54%,rgba(8,28,70,.12))
+    }
+    #gioi-thieu h1{color:#fff}
+    #gioi-thieu .welcome-copy p{color:#dbe9ff}
+    #gioi-thieu .primary-btn{color:#102b5a;background:#ffdc5d;border-color:#ffdc5d}
+    #gioi-thieu .primary-btn:hover{background:#ffe98c}
+    #gioi-thieu .primary-btn:focus-visible{outline:3px solid #fff;outline-offset:4px}
+    @media(max-width:700px){
+      #gioi-thieu::before{background-position:center}
+      #gioi-thieu::after{background:linear-gradient(180deg,rgba(6,22,58,.67),rgba(8,28,70,.22))}
+    }
   </style>
 </head>
 <body>
