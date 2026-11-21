@@ -1769,7 +1769,11 @@ function positionTurnControls(){
     $('.app-shell').prepend(controls);
   }
 }
-phoneLayout.addEventListener('change',positionTurnControls);
+if(phoneLayout.addEventListener){
+  phoneLayout.addEventListener('change',positionTurnControls);
+}else{
+  phoneLayout.addListener(positionTurnControls);
+}
 let seatAngle=0;
 function orientTable(){
   const screen=$('#playScreen');
