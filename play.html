@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#173b8f">
   <title>Chơi Circuit Quest</title>
-  <link rel="stylesheet" href="style.css?v=board-layout">
+  <link rel="stylesheet" href="style.css?v=hand-sidebar">
 </head>
 <body>
   <main id="setup" class="setup-screen">
@@ -68,11 +68,18 @@
 
         <div class="board-row">
           <div id="board" class="board" aria-label="Bàn chơi 25 ô"></div>
-          <section id="turnControls" class="panel turn-controls">
-      <strong id="pileLabel"></strong>
-      <button id="drawBtn" class="small-btn">Rút 1 thẻ</button>
-      <button id="nextBtn" class="small-btn">Kết thúc lượt →</button>
-    </section>
+          <aside class="player-sidebar" aria-label="Thao tác lượt và bài trên tay">
+            <section id="turnControls" class="turn-controls">
+              <strong id="pileLabel"></strong>
+              <button id="drawBtn" class="small-btn">Rút 1 thẻ</button>
+              <button id="nextBtn" class="small-btn">Kết thúc lượt →</button>
+            </section>
+            <section class="inventory-panel">
+              <div class="section-title">BÀI TRÊN TAY</div>
+              <div id="selectionHint" class="selection-hint">Chưa chọn linh kiện.</div>
+              <div id="inventory" class="inventory"></div>
+            </section>
+          </aside>
         </div>
 
         <div class="legend">
@@ -82,13 +89,6 @@
           <span><i class="dot meter"></i>Đồng hồ</span>
         </div>
       </section>
-
-    <section class="panel inventory-panel">
-          <div class="section-title">BÀI TRÊN TAY</div>
-          <div id="selectionHint" class="selection-hint">Chưa chọn linh kiện.</div>
-          <div class="hint">Kéo hình linh kiện vào một ô, hoặc chọn linh kiện rồi giữ và vuốt trên bàn để đặt vào nhiều ô.</div>
-          <div id="inventory" class="inventory"></div>
-        </section>
 
     <section class="panel result-panel">
       <div class="section-title">KẾT QUẢ KIỂM TRA</div>
