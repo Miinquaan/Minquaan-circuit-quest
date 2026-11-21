@@ -47,6 +47,7 @@ const board=Object.fromEntries(
 let selectedMode='EASY';
 let selectedCard=null;
 let selectedCell=null;
+let choosingRemoval=false;
 let mission=null;
 let recentSignatures=[];
 
@@ -1903,23 +1904,23 @@ function renderBoard(){
 
 function updateHints(){
 
+  const removeButton=$('#removeBtn');
+  removeButton.textContent=choosingRemoval ? '✕ HỦY GỠ' : '🗑 GỠ THẺ';
+  removeButton.disabled=!(selectedCell && board[selectedCell]!=='EMPTY') &&
+    !(selectedCard && Object.values(board).some(id=>id!=='EMPTY'));
+
   $('#selectionHint').textContent=
     selectedCard
-      ? `Đang chọn: ${CARDS[selectedCard].name} • chạm ô trống để đặt.`
+      ? `Đang chọn: ${CARDS[selectedCard].name}.`
       : selectedCell
         ? `Đang chọn thẻ ở ô ${selectedCell} • bấm GỠ THẺ để tháo.`
         : 'Chưa chọn linh kiện.';
 
-  $('#boardHint').textContent=
-    selectedCard
-      ? 'Ô trống: đặt thẻ • Ô đã có thẻ: chọn thẻ đó để gỡ.'
-      : 'Chạm linh kiện trong kho để chọn • chạm thẻ trên bàn để chọn thẻ muốn gỡ.';
-
-  $('#removeBtn').disabled=
-    !(
-      selectedCell &&
-      board[selectedCell]!=='EMPTY'
-    );
+  $('#boardHint').textContent=choosingRemoval
+    ? 'Chạm thẻ trên bàn để gỡ. Thẻ trong kho vẫn được chọn.'
+    : selectedCard
+      ? 'Chạm ô trống để đặt, chạm thẻ để thay, hoặc bấm GỠ THẺ rồi chọn thẻ muốn gỡ.'
+      : 'Chọn linh kiện trong kho để đặt hoặc chọn thẻ trên bàn để gỡ.';
 
   $('#clearSelectionBtn').disabled=
     !(
@@ -1943,6 +1944,7 @@ function selectCard(id){
     return;
   }
 
+  choosingRemoval=false;
   selectedCard=
     selectedCard===id
       ? null
@@ -1953,7 +1955,7 @@ function selectCard(id){
   setResult(
     'neutral',
     selectedCard
-      ? `Đã chọn ${CARDS[id].name}. Chạm một ô trống để đặt.`
+      ? `Đã chọn ${CARDS[id].name}. Chạm một ô để đặt hoặc thay thẻ.`
       : 'Đã bỏ chọn linh kiện.'
   );
 
@@ -1962,10 +1964,16 @@ function selectCard(id){
 
 function handleCellClick(cell){
 
-  if(
-    board[cell]==='EMPTY' &&
-    selectedCard
-  ){
+  if(choosingRemoval){
+    if(board[cell]!=='EMPTY'){
+      selectedCell=cell;
+      removeSelected();
+    }
+    return;
+  }
+
+  if(selectedCard){
+    const previous=board[cell];
 
     board[cell]=selectedCard;
 
@@ -1974,7 +1982,9 @@ function handleCellClick(cell){
 
     setResult(
       'neutral',
-      `Đã đặt ${CARDS[board[cell]].name} vào ô ${cell}.`
+      previous==='EMPTY'
+        ? `Đã đặt ${CARDS[board[cell]].name} vào ô ${cell}.`
+        : `Đã thay ${CARDS[previous].name} bằng ${CARDS[board[cell]].name} ở ô ${cell}. Thẻ cũ đã trở lại kho.`
     );
 
     renderAll();
@@ -2020,6 +2030,7 @@ function removeSelected(){
   const removed=
     board[selectedCell];
 
+  choosingRemoval=false;
   board[selectedCell]='EMPTY';
 
   selectedCell=null;
@@ -2033,6 +2044,7 @@ function removeSelected(){
 }
 
 function clearSelection(){
+  choosingRemoval=false;
 
   selectedCard=null;
   selectedCell=null;
@@ -2041,6 +2053,7 @@ function clearSelection(){
 }
 
 function clearBoard(){
+  choosingRemoval=false;
 
   for(
     let i=1;
@@ -3299,7 +3312,14 @@ $('#resetBtn')
 $('#removeBtn')
   .addEventListener(
     'click',
-    removeSelected
+    ()=>{
+      if(selectedCard){
+        choosingRemoval=!choosingRemoval;
+        updateHints();
+      }else{
+        removeSelected();
+      }
+    }
   );
 
 $('#clearSelectionBtn')
