@@ -1717,14 +1717,98 @@ function imageOrFallback(
 
 let boardCellContext=0;
 
+const playerColors=[
+  ['Xanh dương','#174699'],['Cam','#9b4507'],
+  ['Xanh lá','#166045'],['Tím','#713794']
+];
+let hands=[];
+let drawPile=[];
+let currentPlayer=0;
+let drewThisTurn=false;
+const owners={};
+
+function handCount(id){
+  return hands[currentPlayer].filter(card=>card===id).length;
+}
+
+function returnBoardCard(cell){
+  if(board[cell]==='EMPTY')return;
+  hands[owners[cell]].push(board[cell]);
+  delete owners[cell];
+  board[cell]='EMPTY';
+}
+
+function placeFromHand(cell,id){
+  const hand=hands[currentPlayer];
+  const index=hand.indexOf(id);
+  if(index<0 || board[cell]===id)return;
+  hand.splice(index,1);
+  returnBoardCard(cell);
+  board[cell]=id;
+  owners[cell]=currentPlayer;
+}
+
+function turnName(){
+  return `Người chơi ${currentPlayer+1} · ${playerColors[currentPlayer][0]}`;
+}
+
+function renderTurn(){
+  document.body.style.setProperty('--turn-color',playerColors[currentPlayer][1]);
+  $('#turnLabel').textContent='Lượt của '+turnName();
+  $('#pileLabel').textContent=`Chồng bài rút · ${drawPile.length} thẻ`;
+  $('#drawBtn').disabled=drewThisTurn || drawPile.length===0;
+  $('#drawBtn').textContent=drewThisTurn ? 'Đã rút lượt này' : 'Rút 1 thẻ';
+}
+
+function startSession(count){
+  drawPile=ALL_IDS.flatMap(id=>Array(MAX_COUNTS[id]).fill(id));
+  for(let i=drawPile.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [drawPile[i],drawPile[j]]=[drawPile[j],drawPile[i]];
+  }
+  hands=Array.from({length:count},()=>drawPile.splice(-4));
+  currentPlayer=0;
+  drewThisTurn=false;
+  $('#setup').hidden=true;
+  $('#playScreen').hidden=false;
+  generateMission();
+  $('#drawBtn').focus();
+}
+
+function drawCard(){
+  if(drewThisTurn || !drawPile.length)return;
+  const card=drawPile.pop();
+  hands[currentPlayer].push(card);
+  drewThisTurn=true;
+  setResult('neutral','Đã rút '+CARDS[card].name+'.');
+  renderAll();
+}
+
+function nextPlayer(){
+  endDrag();
+  currentPlayer=(currentPlayer+1)%hands.length;
+  drewThisTurn=false;
+  selectedCell=null;
+  selectedCard=null;
+  choosingRemoval=false;
+  setResult('neutral','Đến lượt '+turnName()+'.');
+  renderAll();
+  if(hands.length>1){
+    $('#playScreen').hidden=true;
+    $('#handoffTitle').textContent='Lượt của '+turnName();
+    $('#handoff').hidden=false;
+    $('#readyBtn').focus();
+  }
+  window.scrollTo(0,0);
+}
+
 function renderInventory(){
 
   let html='';
 
-  for(const id of ALL_IDS){
+  for(const id of new Set(hands[currentPlayer])){
 
-    const remaining=
-      MAX_COUNTS[id]-countCard(id);
+    const remaining=handCount(id);
 
     const disabled=
       remaining<=0;
@@ -1755,14 +1839,14 @@ function renderInventory(){
             <span
               class="stock ${disabled?'empty':''}"
             >
-              ${remaining}/${MAX_COUNTS[id]}
+              ×${remaining}
             </span>
           </div>
         </div>
       </button>`;
   }
 
-  $('#inventory').innerHTML=html;
+  $('#inventory').innerHTML=html || '<p>Bạn đã hết thẻ trên tay.</p>';
 
   document
     .querySelectorAll('.card-btn')
@@ -1986,7 +2070,7 @@ document.addEventListener('pointerdown',e=>{
   const card=fromStock ? source.dataset.card : selectedCard;
   gesture={pointer:e.pointerId,card,source,fromStock,active:false,
     surface:source.parentElement,x:e.clientX,y:e.clientY,
-    stock:MAX_COUNTS[card]-countCard(card),cells:new Set(),hover:null};
+    stock:handCount(card),cells:new Set(),hover:null};
 });
 
 document.addEventListener('pointermove',trackDrag);
@@ -2004,8 +2088,8 @@ document.addEventListener('pointerup',e=>{
     return;
   }
   if(!cells.size)return;
-  for(const cell of cells)board[cell]=card;
-  selectedCard=countCard(card)<MAX_COUNTS[card] ? card : null;
+  for(const cell of cells)placeFromHand(cell,card);
+  selectedCard=handCount(card)>0 ? card : null;
   selectedCell=null;
   setResult('neutral',`Đã đặt ${CARDS[card].name} vào ${cells.size} ô.`);
   renderAll();
@@ -2045,10 +2129,10 @@ function updateHints(){
         : 'Chưa chọn linh kiện.';
 
   $('#boardHint').textContent=choosingRemoval
-    ? 'Chạm thẻ trên bàn để gỡ. Thẻ trong kho vẫn được chọn.'
+    ? 'Chạm thẻ trên bàn để gỡ. Thẻ trên tay vẫn được chọn.'
     : selectedCard
       ? 'Chạm để đặt hoặc thay thẻ. Giữ và vuốt qua nhiều ô để đặt hàng loạt. Bấm GỠ THẺ để tháo.'
-      : 'Chọn linh kiện trong kho để đặt hoặc chọn thẻ trên bàn để gỡ.';
+      : 'Chọn linh kiện trên tay để đặt hoặc chọn thẻ trên bàn để gỡ.';
 
   $('#clearSelectionBtn').disabled=
     !(
@@ -2058,6 +2142,8 @@ function updateHints(){
 }
 
 function renderAll(){
+  if(!hands.length)return;
+  renderTurn();
 
   renderInventory();
   renderBoard();
@@ -2067,7 +2153,7 @@ function renderAll(){
 function selectCard(id){
 
   if(
-    MAX_COUNTS[id]-countCard(id)<=0
+    handCount(id)<=0
   ){
     return;
   }
@@ -2103,7 +2189,7 @@ function handleCellClick(cell){
   if(selectedCard){
     const previous=board[cell];
 
-    board[cell]=selectedCard;
+    placeFromHand(cell,selectedCard);
 
     selectedCard=null;
     selectedCell=cell;
@@ -2112,7 +2198,7 @@ function handleCellClick(cell){
       'neutral',
       previous==='EMPTY'
         ? `Đã đặt ${CARDS[board[cell]].name} vào ô ${cell}.`
-        : `Đã thay ${CARDS[previous].name} bằng ${CARDS[board[cell]].name} ở ô ${cell}. Thẻ cũ đã trở lại kho.`
+        : `Đã thay ${CARDS[previous].name} bằng ${CARDS[board[cell]].name} ở ô ${cell}. Thẻ cũ đã về tay chủ thẻ.`
     );
 
     renderAll();
@@ -2159,13 +2245,13 @@ function removeSelected(){
     board[selectedCell];
 
   choosingRemoval=false;
-  board[selectedCell]='EMPTY';
+  returnBoardCard(selectedCell);
 
   selectedCell=null;
 
   setResult(
     'neutral',
-    `Đã gỡ ${CARDS[removed].name}. Thẻ đã trở lại kho.`
+    `Đã gỡ ${CARDS[removed].name}. Thẻ đã về tay chủ thẻ.`
   );
 
   renderAll();
@@ -2190,7 +2276,7 @@ function clearBoard(){
     i<=25;
     i++
   ){
-    board[i]='EMPTY';
+    returnBoardCard(i);
   }
 
   selectedCard=null;
@@ -3464,5 +3550,23 @@ $('#checkBtn')
     checkMission
   );
 
-formatMission();
-renderAll();
+$('#tryBtn').addEventListener('click',()=>{
+  $('#intro').hidden=true;
+  $('#setup').hidden=false;
+  document.querySelector('[data-players]').focus();
+});
+$('#backBtn').addEventListener('click',()=>{
+  $('#setup').hidden=true;
+  $('#intro').hidden=false;
+  $('#tryBtn').focus();
+});
+document.querySelectorAll('[data-players]').forEach(button=>{
+  button.addEventListener('click',()=>startSession(Number(button.dataset.players)));
+});
+$('#drawBtn').addEventListener('click',drawCard);
+$('#nextBtn').addEventListener('click',nextPlayer);
+$('#readyBtn').addEventListener('click',()=>{
+  $('#handoff').hidden=true;
+  $('#playScreen').hidden=false;
+  $('#nextBtn').focus();
+});
