@@ -7,15 +7,15 @@
   <title>CIRCUIT QUEST</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .project-nav{position:sticky;top:0;z-index:10;display:flex;justify-content:center;background:#173b8f}
-    .project-nav a{display:grid;place-items:center;min-height:48px;padding:8px clamp(8px,3vw,32px);text-align:center;color:#fff;text-decoration:none;font-size:clamp(13px,2vw,16px);font-weight:700;border-bottom:4px solid transparent}
+    .project-nav{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:repeat(3,minmax(0,220px));justify-content:center;gap:clamp(5px,1.5vw,18px);background:#173b8f}
+    .project-nav a{display:grid;place-items:center;min-height:64px;padding:10px clamp(4px,1.6vw,20px);text-align:center;color:#fff;text-decoration:none;font-size:clamp(15px,2.2vw,20px);font-weight:700;border-bottom:4px solid transparent}
     .project-nav a[aria-current="page"]{background:#234da4;border-color:#ffdc5d}
     .project-nav a:focus-visible{outline:2px solid white;outline-offset:-4px}
-    .project-nav{padding-block:4px 0}
+    .project-nav{padding:10px clamp(10px,3vw,32px) 4px}
     .nav-item{position:relative;display:grid;min-width:0}
-    .nav-item a{border-radius:9px 9px 0 0}
+    .nav-item a{border-radius:12px 12px 4px 4px;background:#204599}
     .nav-item.is-previewing{z-index:1}
-    .nav-item.is-previewing a{transform:translateY(-3px) scale(1.025);background:#294faa;box-shadow:0 4px 12px #0a204854}
+    .nav-item.is-previewing a{transform:translateY(-2px) scale(1.10);background:#294faa;box-shadow:0 4px 12px #0a204854}
     .nav-preview{position:absolute;inset-block-start:100%;inset-inline-start:50%;transform:translateX(-50%);width:min(244px,90vw);padding:5px 0 0}
     .nav-item:first-child .nav-preview{inset-inline-start:0;transform:none}
     .nav-item:last-child .nav-preview{inset-inline-start:auto;inset-inline-end:0;transform:none}
@@ -25,7 +25,7 @@
       .nav-item a{transition:transform .15s ease-out,box-shadow .15s,background .15s}
     }
     #bo-ban-choi{max-width:1100px;margin:auto;padding:clamp(16px,4vw,48px)}
-    [data-project-panel]{scroll-margin-top:60px}
+    [data-project-panel]{scroll-margin-top:90px}
     #luat-choi{max-width:1100px;margin:0 auto;padding:clamp(16px,4vw,48px)}
     #rules-title{color:#173b8f}
     #luat-choi a,#luat-choi img{display:block}
@@ -58,7 +58,7 @@
     <div class="welcome-copy">
       <h1 id="intro-title">Circuit Quest</h1>
       <div id="projectIntro"><p>Chưa có thông tin.</p></div>
-      <a href="play.html" class="primary-btn">Chơi thử bản web →</a>
+      <a href="play.html?v=seat-cards" class="primary-btn">Chơi thử bản web →</a>
     </div>
     <div class="cover-cards" aria-hidden="true"><img src="assets/cards/A01.png" alt=""><img src="assets/cards/A08.png" alt=""><img src="assets/cards/A14.png" alt=""></div>
   </section>
