@@ -7,7 +7,12 @@
   <title>CIRCUIT QUEST</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .rules-jump{display:inline-block;margin:0 1rem .5rem 0;color:#173b8f}
+    .project-nav{position:sticky;top:0;z-index:10;display:flex;justify-content:center;background:#173b8f}
+    .project-nav a{display:grid;place-items:center;min-height:48px;padding:8px clamp(8px,3vw,32px);text-align:center;color:#fff;text-decoration:none;font-size:clamp(13px,2vw,16px);font-weight:700;border-bottom:4px solid transparent}
+    .project-nav a[aria-current="page"]{background:#234da4;border-color:#ffdc5d}
+    .project-nav a:focus-visible{outline:2px solid white;outline-offset:-4px}
+    #bo-ban-choi{max-width:1100px;margin:auto;padding:clamp(16px,4vw,48px)}
+    [data-project-panel]{scroll-margin-top:60px}
     #luat-choi{max-width:1100px;margin:0 auto;padding:clamp(16px,4vw,48px)}
     #rules-title{color:#173b8f}
     #luat-choi a,#luat-choi img{display:block}
@@ -15,21 +20,46 @@
   </style>
 </head>
 <body>
-  <main id="intro" class="welcome">
+  <nav class="project-nav" aria-label="Thông tin dự án">
+    <a href="#gioi-thieu">Giới thiệu</a>
+    <a href="#luat-choi">Luật chơi</a>
+    <a href="#bo-ban-choi">Bộ bàn chơi thực tế</a>
+  </nav>
+  <main>
+  <section id="gioi-thieu" class="welcome" data-project-panel aria-labelledby="intro-title">
     <div class="welcome-copy">
-      <h1>Circuit Quest</h1>
-      <div id="projectIntro"><p>Trò chơi lắp mạch điện bằng thẻ linh kiện. Chơi một mình hoặc cùng bạn bè lắp mạch trên một thiết bị.</p></div>
-      <a class="rules-jump" href="#luat-choi">Luật chơi</a>
+      <h1 id="intro-title">Circuit Quest</h1>
+      <div id="projectIntro"><p>Chưa có thông tin.</p></div>
       <a href="play.html" class="primary-btn">Chơi thử bản web →</a>
     </div>
     <div class="cover-cards" aria-hidden="true"><img src="assets/cards/A01.png" alt=""><img src="assets/cards/A08.png" alt=""><img src="assets/cards/A14.png" alt=""></div>
-  </main>
-  <section id="luat-choi" aria-labelledby="rules-title">
+  </section>
+  <section id="luat-choi" data-project-panel aria-labelledby="rules-title">
     <h2 id="rules-title">Luật chơi</h2>
     <a href="assets/luat-choi.png" aria-label="Xem ảnh luật chơi Circuit Quest ở kích thước gốc">
       <img src="assets/luat-choi.png" width="2000" height="1414" loading="lazy" alt="Luật Circuit Quest: chia 4 thẻ cho mỗi người, giữ im lặng, lần lượt đặt linh kiện theo chiều kim đồng hồ và kiểm tra mạch theo nhiệm vụ.">
     </a>
   </section>
+  <section id="bo-ban-choi" data-project-panel aria-labelledby="kit-title">
+    <h2 id="kit-title">Bộ bàn chơi thực tế</h2>
+    <p>Chưa có thông tin.</p>
+  </section>
+  </main>
   <footer class="footer">CIRCUIT QUEST • phiên bản web • không cần Python</footer>
+  <script>
+    const panels = Array.from(document.querySelectorAll('[data-project-panel]'));
+    const links = document.querySelectorAll('.project-nav a');
+    function showSection() {
+      const current = panels.find(panel => '#' + panel.id === location.hash) || panels[0];
+      for (const panel of panels) panel.hidden = panel !== current;
+      for (const link of links) {
+        if (link.hash === '#' + current.id) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
+      }
+      window.scrollTo(0, 0);
+    }
+    window.addEventListener('hashchange', showSection);
+    showSection();
+  </script>
 </body>
 </html>
