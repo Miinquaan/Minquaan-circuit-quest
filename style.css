@@ -85,3 +85,8 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
   .card-art{width:92px;height:112px}
   .board-art{height:calc(100% - 6px);padding:4px 6px}
 }
+.card-art,.board.paint-ready .cell{touch-action:none}
+.card-btn,.cell{user-select:none;-webkit-user-select:none}
+.card-btn:enabled .card-art{cursor:grab}
+.card-btn.drag-source{outline:3px solid #8ab1ff}
+.board .cell.drop-target{outline:3px solid #2563eb;outline-offset:-3px;background:#dbeafe}
