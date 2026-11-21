@@ -11,6 +11,19 @@
     .project-nav a{display:grid;place-items:center;min-height:48px;padding:8px clamp(8px,3vw,32px);text-align:center;color:#fff;text-decoration:none;font-size:clamp(13px,2vw,16px);font-weight:700;border-bottom:4px solid transparent}
     .project-nav a[aria-current="page"]{background:#234da4;border-color:#ffdc5d}
     .project-nav a:focus-visible{outline:2px solid white;outline-offset:-4px}
+    .project-nav{padding-block:4px 0}
+    .nav-item{position:relative;display:grid;min-width:0}
+    .nav-item a{border-radius:9px 9px 0 0}
+    .nav-item.is-previewing{z-index:1}
+    .nav-item.is-previewing a{transform:translateY(-3px) scale(1.025);background:#294faa;box-shadow:0 4px 12px #0a204854}
+    .nav-preview{position:absolute;inset-block-start:100%;inset-inline-start:50%;transform:translateX(-50%);width:min(244px,90vw);padding:5px 0 0}
+    .nav-item:first-child .nav-preview{inset-inline-start:0;transform:none}
+    .nav-item:last-child .nav-preview{inset-inline-start:auto;inset-inline-end:0;transform:none}
+    .preview-body{display:grid;gap:8px;padding:14px;background:#fff;color:#203556;border:1px solid #cdd9ef;border-radius:14px;box-shadow:0 12px 26px #122d5729;font-size:14px;line-height:1.45}
+    .preview-body img{width:100%;height:auto;border-radius:7px}
+    @media(prefers-reduced-motion:no-preference){
+      .nav-item a{transition:transform .15s ease-out,box-shadow .15s,background .15s}
+    }
     #bo-ban-choi{max-width:1100px;margin:auto;padding:clamp(16px,4vw,48px)}
     [data-project-panel]{scroll-margin-top:60px}
     #luat-choi{max-width:1100px;margin:0 auto;padding:clamp(16px,4vw,48px)}
@@ -21,9 +34,24 @@
 </head>
 <body>
   <nav class="project-nav" aria-label="Thông tin dự án">
-    <a href="#gioi-thieu">Giới thiệu</a>
-    <a href="#luat-choi">Luật chơi</a>
-    <a href="#bo-ban-choi">Bộ bàn chơi thực tế</a>
+    <div class="nav-item">
+      <a href="#gioi-thieu" aria-describedby="preview-gioi-thieu">Giới thiệu</a>
+      <div id="preview-gioi-thieu" class="nav-preview" role="tooltip" hidden>
+        <div class="preview-body"><strong>Circuit Quest</strong>Chưa có thông tin.</div>
+      </div>
+    </div>
+    <div class="nav-item">
+      <a href="#luat-choi" aria-describedby="preview-luat-choi">Luật chơi</a>
+      <div id="preview-luat-choi" class="nav-preview" role="tooltip" hidden>
+        <div class="preview-body"><img src="assets/luat-choi.png" width="2000" height="1414" alt="">Mỗi người nhận 4 thẻ và lần lượt đặt linh kiện theo chiều kim đồng hồ.</div>
+      </div>
+    </div>
+    <div class="nav-item">
+      <a href="#bo-ban-choi" aria-describedby="preview-bo-ban-choi">Bộ bàn chơi thực tế</a>
+      <div id="preview-bo-ban-choi" class="nav-preview" role="tooltip" hidden>
+        <div class="preview-body">Chưa có thông tin.</div>
+      </div>
+    </div>
   </nav>
   <main>
   <section id="gioi-thieu" class="welcome" data-project-panel aria-labelledby="intro-title">
@@ -49,7 +77,40 @@
   <script>
     const panels = Array.from(document.querySelectorAll('[data-project-panel]'));
     const links = document.querySelectorAll('.project-nav a');
+    let previewItem = null;
+    function setPreview(item) {
+      if (previewItem === item) return;
+      if (previewItem) {
+        previewItem.classList.remove('is-previewing');
+        previewItem.querySelector('.nav-preview').hidden = true;
+      }
+      previewItem = item;
+      if (item) {
+        item.classList.add('is-previewing');
+        item.querySelector('.nav-preview').hidden = false;
+      }
+    }
+    for (const link of links) {
+      const item = link.parentElement;
+      item.addEventListener('pointerenter', event => {
+        if (event.pointerType === 'mouse') setPreview(item);
+      });
+      item.addEventListener('pointerleave', () => {
+        if (previewItem === item) setPreview(null);
+      });
+      link.addEventListener('focus', () => {
+        if (link.matches(':focus-visible')) setPreview(item);
+      });
+      link.addEventListener('blur', () => {
+        if (previewItem === item) setPreview(null);
+      });
+      link.addEventListener('click', () => setPreview(null));
+    }
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') setPreview(null);
+    });
     function showSection() {
+      setPreview(null);
       const current = panels.find(panel => '#' + panel.id === location.hash) || panels[0];
       for (const panel of panels) panel.hidden = panel !== current;
       for (const link of links) {
