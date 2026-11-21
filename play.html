@@ -5,20 +5,31 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#173b8f">
   <title>Chơi Circuit Quest</title>
-  <link rel="stylesheet" href="style.css?v=hand-sidebar">
+  <link rel="stylesheet" href="style.css?v=player-picker">
 </head>
 <body>
   <main id="setup" class="setup-screen">
     <section class="panel setup-box">
-      <h1>Chọn số người chơi</h1>
-      <p>Mỗi người nhận 4 thẻ. Khi chơi 4 người, đặt máy giữa bàn và ngồi ở bốn phía. Giao diện xoay 90° sau mỗi lượt.</p>
-      <div class="player-options" aria-label="Số người chơi">
-        <button data-players="1" aria-label="1 người chơi">1</button>
-        <button data-players="2" aria-label="2 người chơi">2</button>
-        <button data-players="3" aria-label="3 người chơi">3</button>
-        <button data-players="4" aria-label="4 người chơi">4</button>
+      <a href="index.html" class="setup-back">← Giới thiệu</a>
+      <h1 id="player-count-title">Chọn số người chơi</h1>
+      <div class="player-options" role="group" aria-labelledby="player-count-title">
+        <button type="button" data-players="1" aria-label="1 người chơi">
+          <span class="seat-pieces" aria-hidden="true"><i></i></span>
+          <span class="seat-label"><strong>1</strong> người</span>
+        </button>
+        <button type="button" data-players="2" aria-label="2 người chơi">
+          <span class="seat-pieces" aria-hidden="true"><i></i><i></i></span>
+          <span class="seat-label"><strong>2</strong> người</span>
+        </button>
+        <button type="button" data-players="3" aria-label="3 người chơi">
+          <span class="seat-pieces" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="seat-label"><strong>3</strong> người</span>
+        </button>
+        <button type="button" data-players="4" aria-label="4 người chơi">
+          <span class="seat-pieces" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="seat-label"><strong>4</strong> người</span>
+        </button>
       </div>
-      <a href="index.html" class="small-btn">← Giới thiệu</a>
     </section>
   </main>
   <section id="handoff" class="setup-screen" hidden>
