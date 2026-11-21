@@ -1760,6 +1760,23 @@ function renderTurn(){
   $('#drawBtn').textContent=drewThisTurn ? 'Đã rút lượt này' : 'Rút 1 thẻ';
 }
 
+const phoneLayout=window.matchMedia('(max-width: 980px), (pointer: coarse) and (max-height: 720px)');
+function positionTurnControls(){
+  const controls=$('#turnControls');
+  if(phoneLayout.matches || hands.length===4){
+    $('.board-row').append(controls);
+  }else{
+    $('.app-shell').prepend(controls);
+  }
+}
+phoneLayout.addEventListener('change',positionTurnControls);
+let seatAngle=0;
+function orientTable(){
+  const screen=$('#playScreen');
+  screen.style.setProperty('--seat-angle',seatAngle+'deg');
+  screen.classList.toggle('side-seat',currentPlayer%2===1);
+}
+
 function startSession(count){
   drawPile=ALL_IDS.flatMap(id=>Array(MAX_COUNTS[id]).fill(id));
   for(let i=drawPile.length-1;i>0;i--){
@@ -1769,10 +1786,14 @@ function startSession(count){
   hands=Array.from({length:count},()=>drawPile.splice(-4));
   currentPlayer=0;
   drewThisTurn=false;
+  seatAngle=0;
+  document.body.classList.toggle('table-game',count===4);
+  orientTable();
+  positionTurnControls();
   $('#setup').hidden=true;
   $('#playScreen').hidden=false;
   generateMission();
-  $('#drawBtn').focus();
+  $('#drawBtn').focus({preventScroll:true});
 }
 
 function drawCard(){
@@ -1793,6 +1814,13 @@ function nextPlayer(){
   choosingRemoval=false;
   setResult('neutral','Đến lượt '+turnName()+'.');
   renderAll();
+  if(hands.length===4){
+    seatAngle+=90;
+    orientTable();
+    $('#playScreen').scrollTop=0;
+    $('#nextBtn').blur();
+    return;
+  }
   if(hands.length>1){
     $('#playScreen').hidden=true;
     $('#handoffTitle').textContent='Lượt của '+turnName();
@@ -2014,10 +2042,14 @@ function previewAt(x,y){
 
 function scrollWhileDragging(){
   if(!gesture?.active || !gesture.fromStock)return;
-  const y=gesture.y;
-  const step=y<50 ? -12 : y>window.innerHeight-50 ? 12 : 0;
+  const table=hands.length===4;
+  const {x,y}=gesture;
+  const edge=table ? [y,window.innerWidth-x,window.innerHeight-y,x][currentPlayer] : y;
+  const extent=table && currentPlayer%2 ? window.innerWidth : window.innerHeight;
+  const step=edge<50 ? -12 : edge>extent-50 ? 12 : 0;
   if(step){
-    window.scrollBy(0,step);
+    const surface=table ? $('#playScreen') : window;
+    surface.scrollBy(0,step);
     previewAt(gesture.x,y);
   }
   scrollFrame=requestAnimationFrame(scrollWhileDragging);
