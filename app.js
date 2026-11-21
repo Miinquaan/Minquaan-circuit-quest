@@ -3582,16 +3582,6 @@ $('#checkBtn')
     checkMission
   );
 
-$('#tryBtn').addEventListener('click',()=>{
-  $('#intro').hidden=true;
-  $('#setup').hidden=false;
-  document.querySelector('[data-players]').focus();
-});
-$('#backBtn').addEventListener('click',()=>{
-  $('#setup').hidden=true;
-  $('#intro').hidden=false;
-  $('#tryBtn').focus();
-});
 document.querySelectorAll('[data-players]').forEach(button=>{
   button.addEventListener('click',()=>startSession(Number(button.dataset.players)));
 });
