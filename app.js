@@ -1767,20 +1767,26 @@ function orientTable(){
   screen.classList.toggle('side-seat',currentPlayer%2===1);
 }
 
-function startSession(count){
+function resetCards(count){
+  clearBoard();
   drawPile=ALL_IDS.flatMap(id=>Array(MAX_COUNTS[id]).fill(id));
   for(let i=drawPile.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
     [drawPile[i],drawPile[j]]=[drawPile[j],drawPile[i]];
   }
   hands=Array.from({length:count},()=>drawPile.splice(-4));
-  currentPlayer=0;
   drewThisTurn=false;
+  renderAll();
+}
+
+function startSession(count){
+  currentPlayer=0;
   seatAngle=0;
   document.body.classList.toggle('table-game',count===4);
   orientTable();
   $('#setup').hidden=true;
   $('#playScreen').hidden=false;
+  resetCards(count);
   generateMission();
   $('#drawBtn').focus({preventScroll:true});
 }
@@ -2302,8 +2308,6 @@ function clearBoard(){
 
   selectedCard=null;
   selectedCell=null;
-
-  renderAll();
 }
 
 function neighbors(cell){
@@ -3413,8 +3417,6 @@ function setResult(
 
 function generateMission(){
 
-  clearBoard();
-
   let candidate=null;
 
   for(
@@ -3478,6 +3480,7 @@ function setMode(mode){
   mission=null;
 
   clearBoard();
+  renderAll();
 
   formatMission();
 
@@ -3526,7 +3529,10 @@ document
 $('#newMissionBtn')
   .addEventListener(
     'click',
-    generateMission
+    ()=>{
+      resetCards(hands.length);
+      generateMission();
+    }
   );
 
 $('#resetBtn')
@@ -3535,13 +3541,13 @@ $('#resetBtn')
     ()=>{
       mission=null;
 
-      clearBoard();
+      resetCards(hands.length);
 
       formatMission();
 
       setResult(
         'neutral',
-        'Đã xóa bàn. Chọn mức độ và tạo nhiệm vụ mới.'
+        'Đã dọn bàn và chia lại 4 thẻ cho mỗi người.'
       );
     }
   );
