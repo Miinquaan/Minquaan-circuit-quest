@@ -130,29 +130,43 @@ body.table-game{overflow:hidden}
 }
 .table-game #playScreen.side-seat{width:100vh;height:100vw;width:100dvh;height:100dvw}
 .table-game .footer{display:none}
-.table-game .app-shell{display:flex;flex-direction:column;gap:10px;max-width:1100px;padding:8px}
-.table-game .layout,.table-game .left-column{display:contents}
-.table-game .board-panel{order:-3;padding:8px}
-.table-game .inventory-panel{order:-2}
-.table-game .mission-panel{order:-1}
 .table-game .board-header{flex-direction:row;align-items:center;flex-wrap:wrap;gap:4px}
 .table-game .board-actions{width:auto;gap:4px}
 .table-game .board-actions button{flex:auto;font-size:11px;min-height:36px;padding:4px 8px}
 .table-game .topbar{padding:6px 12px}
 .table-game .brand{font-size:16px}
-.table-game .board-row{max-width:590px}
-@container (min-width:600px){
-  .table-game .app-shell{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);align-items:start}
-  .table-game .board-panel{grid-column:1}
-  .table-game .inventory-panel{grid-column:2}
-  .table-game .mission-panel,.table-game .control-panel,.table-game .result-panel,.table-game .help-panel{grid-column:1/-1}
-  .table-game .inventory{grid-template-columns:repeat(auto-fit,minmax(min(100%,110px),1fr));max-height:none}
-  .table-game .card-btn{min-width:0;min-height:64px;grid-template-columns:40% 1fr;padding:4px;gap:4px}
-  .table-game .card-art{width:100%;height:54px}
-}
 @media(prefers-reduced-motion:no-preference){
   .table-game #playScreen{transition:rotate .24s ease-out}
 }
 
 a.primary-btn,a.small-btn,a.brand{display:inline-block;text-decoration:none}
 a.small-btn,a.brand{color:inherit}
+
+#playScreen{container-type:inline-size}
+.app-shell{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  max-width:1180px;gap:12px;padding:12px;margin-inline:auto
+}
+.app-shell>.panel{grid-column:1/-1;min-width:0}
+.app-shell>.mission-panel,.app-shell>.control-panel{grid-column:auto}
+.mission-panel .mission-box{min-height:0;max-height:15rem;overflow:auto;padding:10px}
+.mission-summary{grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr))}
+.board-row{width:100%;max-width:1040px;margin-inline:auto;display:grid;grid-template-columns:minmax(0,1fr) clamp(72px,12%,112px);align-items:start;gap:8px}
+.board-row .board{grid-template-columns:repeat(5,minmax(0,1fr));width:100%;max-width:none}
+.board-row .cell{width:100%;min-width:0;min-height:0}
+.inventory-panel .inventory{grid-template-columns:repeat(auto-fill,minmax(min(100%,195px),1fr));max-height:none}
+.inventory-panel .card-btn{min-width:0;min-height:140px;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);padding:8px;gap:8px}
+.inventory-panel .card-art{width:100%;height:120px}
+.inventory-panel .card-name{font-size:15px}
+@container (max-width:600px){
+  .app-shell{gap:6px;padding:6px}
+  .app-shell>.panel{padding:8px}
+  .mission-panel .mission-box{max-height:10.5rem;padding:6px}
+  .mission-top{flex-wrap:wrap;gap:3px}
+  .mission-title{font-size:15px}
+  .mode-grid{grid-template-columns:1fr;gap:3px;margin:5px 0}
+  .control-panel button{min-height:32px;padding:4px;font-size:12px}
+  .inventory-panel .inventory{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .inventory-panel .card-btn{grid-template-columns:1fr;gap:4px}
+  .inventory-panel .card-art{height:106px}
+}

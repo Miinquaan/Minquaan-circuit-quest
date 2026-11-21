@@ -1760,20 +1760,6 @@ function renderTurn(){
   $('#drawBtn').textContent=drewThisTurn ? 'Đã rút lượt này' : 'Rút 1 thẻ';
 }
 
-const phoneLayout=window.matchMedia('(max-width: 980px), (pointer: coarse) and (max-height: 720px)');
-function positionTurnControls(){
-  const controls=$('#turnControls');
-  if(phoneLayout.matches || hands.length===4){
-    $('.board-row').append(controls);
-  }else{
-    $('.app-shell').prepend(controls);
-  }
-}
-if(phoneLayout.addEventListener){
-  phoneLayout.addEventListener('change',positionTurnControls);
-}else{
-  phoneLayout.addListener(positionTurnControls);
-}
 let seatAngle=0;
 function orientTable(){
   const screen=$('#playScreen');
@@ -1793,7 +1779,6 @@ function startSession(count){
   seatAngle=0;
   document.body.classList.toggle('table-game',count===4);
   orientTable();
-  positionTurnControls();
   $('#setup').hidden=true;
   $('#playScreen').hidden=false;
   generateMission();
