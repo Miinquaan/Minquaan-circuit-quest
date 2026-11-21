@@ -35,8 +35,8 @@
       background:#081c46;color:#fff
     }
     #gioi-thieu::before{
-      content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
-      background:url("assets/ban-choi-nen.png") center 46% / cover no-repeat;
+      content:"";position:absolute;inset:12% 16%;z-index:-1;pointer-events:none;
+      background:url("assets/ban-choi-nen.png") center / contain no-repeat;
       mix-blend-mode:luminosity;opacity:.33
     }
     #gioi-thieu::after{
@@ -49,7 +49,7 @@
     #gioi-thieu .primary-btn:hover{background:#ffe98c}
     #gioi-thieu .primary-btn:focus-visible{outline:3px solid #fff;outline-offset:4px}
     @media(max-width:700px){
-      #gioi-thieu::before{background-position:center}
+      #gioi-thieu::before{inset:14% 8%}
       #gioi-thieu::after{background:linear-gradient(180deg,rgba(6,22,58,.67),rgba(8,28,70,.22))}
     }
   </style>
