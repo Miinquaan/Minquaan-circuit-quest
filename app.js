@@ -1902,7 +1902,135 @@ function renderBoard(){
   }
 }
 
+// Keep button clicks for taps and keyboard input. Commit a drag only on release.
+let gesture=null;
+let swallowClick=false;
+let scrollFrame=0;
+
+function cellUnder(x,y){
+  return document.elementFromPoint(x,y)?.closest('#board .cell');
+}
+
+function previewAt(x,y){
+  const tile=cellUnder(x,y);
+  if(gesture.fromStock){
+    if(gesture.hover!==tile){
+      gesture.hover?.classList.remove('drop-target');
+      tile?.classList.add('drop-target');
+      gesture.hover=tile;
+    }
+    return;
+  }
+  if(!tile || gesture.cells.size>=gesture.stock)return;
+  const cell=Number(tile.dataset.cell);
+  if(board[cell]===gesture.card || gesture.cells.has(cell))return;
+  gesture.cells.add(cell);
+  tile.classList.add('drop-target');
+}
+
+function scrollWhileDragging(){
+  if(!gesture?.active || !gesture.fromStock)return;
+  const y=gesture.y;
+  const step=y<50 ? -12 : y>window.innerHeight-50 ? 12 : 0;
+  if(step){
+    window.scrollBy(0,step);
+    previewAt(gesture.x,y);
+  }
+  scrollFrame=requestAnimationFrame(scrollWhileDragging);
+}
+
+function trackDrag(e){
+  if(!gesture || e.pointerId!==gesture.pointer)return;
+  const x=e.clientX, y=e.clientY;
+  const dx=x-gesture.x, dy=y-gesture.y;
+  if(!gesture.active){
+    if(Math.hypot(dx,dy)<6)return;
+    gesture.active=true;
+    gesture.surface.setPointerCapture(e.pointerId);
+    if(gesture.fromStock){
+      gesture.source.classList.add('drag-source');
+      scrollFrame=requestAnimationFrame(scrollWhileDragging);
+    }
+  }
+  if(!gesture.fromStock){
+    // Sample the segment so a fast stroke also reaches intermediate cells.
+    const steps=Math.ceil(Math.hypot(dx,dy)/12);
+    for(let i=0;i<steps;i++){
+      previewAt(gesture.x+dx*i/steps,gesture.y+dy*i/steps);
+    }
+  }
+  previewAt(x,y);
+  gesture.x=x;
+  gesture.y=y;
+}
+
+function endDrag(){
+  if(!gesture)return;
+  cancelAnimationFrame(scrollFrame);
+  const {source,surface,pointer,active}=gesture;
+  gesture=null;
+  source.classList.remove('drag-source');
+  document.querySelectorAll('.drop-target').forEach(tile=>tile.classList.remove('drop-target'));
+  if(surface.hasPointerCapture(pointer))surface.releasePointerCapture(pointer);
+  if(active)swallowClick=true;
+}
+
+document.addEventListener('pointerdown',e=>{
+  if(!e.isPrimary || e.button!==0 || gesture)return;
+  swallowClick=false;
+  const source=e.target.closest('.card-btn, #board .cell');
+  if(!source || source.disabled)return;
+  const fromStock=source.matches('.card-btn');
+  if(!fromStock && (!selectedCard || choosingRemoval))return;
+  if(fromStock && e.pointerType==='touch' && !e.target.closest('.card-art'))return;
+  const card=fromStock ? source.dataset.card : selectedCard;
+  gesture={pointer:e.pointerId,card,source,fromStock,active:false,
+    surface:source.parentElement,x:e.clientX,y:e.clientY,
+    stock:MAX_COUNTS[card]-countCard(card),cells:new Set(),hover:null};
+});
+
+document.addEventListener('pointermove',trackDrag);
+document.addEventListener('pointerup',e=>{
+  if(!gesture || e.pointerId!==gesture.pointer)return;
+  trackDrag(e);
+  const {active,card,fromStock,cells,hover}=gesture;
+  endDrag();
+  if(!active)return;
+  if(fromStock){
+    if(!hover)return;
+    choosingRemoval=false;
+    selectedCard=card;
+    handleCellClick(Number(hover.dataset.cell));
+    return;
+  }
+  if(!cells.size)return;
+  for(const cell of cells)board[cell]=card;
+  selectedCard=countCard(card)<MAX_COUNTS[card] ? card : null;
+  selectedCell=null;
+  setResult('neutral',`Đã đặt ${CARDS[card].name} vào ${cells.size} ô.`);
+  renderAll();
+});
+function cancelPointer(e){
+  if(gesture?.pointer===e.pointerId)endDrag();
+}
+document.addEventListener('pointercancel',cancelPointer);
+document.addEventListener('lostpointercapture',e=>{
+  if(e.target===gesture?.surface)cancelPointer(e);
+});
+window.addEventListener('blur',endDrag);
+document.addEventListener('dragstart',e=>{
+  if(e.target.closest('.card-btn, #board .cell'))e.preventDefault();
+});
+document.addEventListener('click',e=>{
+  if(swallowClick && e.detail!==0){
+    swallowClick=false;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  }
+},true);
+
 function updateHints(){
+  $('#board').classList.toggle('paint-ready',Boolean(selectedCard && !choosingRemoval));
 
   const removeButton=$('#removeBtn');
   removeButton.textContent=choosingRemoval ? '✕ HỦY GỠ' : '🗑 GỠ THẺ';
@@ -1919,7 +2047,7 @@ function updateHints(){
   $('#boardHint').textContent=choosingRemoval
     ? 'Chạm thẻ trên bàn để gỡ. Thẻ trong kho vẫn được chọn.'
     : selectedCard
-      ? 'Chạm ô trống để đặt, chạm thẻ để thay, hoặc bấm GỠ THẺ rồi chọn thẻ muốn gỡ.'
+      ? 'Chạm để đặt hoặc thay thẻ. Giữ và vuốt qua nhiều ô để đặt hàng loạt. Bấm GỠ THẺ để tháo.'
       : 'Chọn linh kiện trong kho để đặt hoặc chọn thẻ trên bàn để gỡ.';
 
   $('#clearSelectionBtn').disabled=
@@ -2044,6 +2172,7 @@ function removeSelected(){
 }
 
 function clearSelection(){
+  endDrag();
   choosingRemoval=false;
 
   selectedCard=null;
@@ -2053,6 +2182,7 @@ function clearSelection(){
 }
 
 function clearBoard(){
+  endDrag();
   choosingRemoval=false;
 
   for(
