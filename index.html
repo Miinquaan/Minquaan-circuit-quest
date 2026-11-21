@@ -11,7 +11,7 @@
   <main id="intro" class="welcome">
     <div class="welcome-copy">
       <h1>Circuit Quest</h1>
-      <div id="projectIntro"><p>Trò chơi lắp mạch điện bằng thẻ linh kiện. Chơi một mình hoặc chuyền thiết bị để cùng bạn bè hoàn thành nhiệm vụ.</p></div>
+      <div id="projectIntro"><p>Trò chơi lắp mạch điện bằng thẻ linh kiện. Chơi một mình hoặc cùng bạn bè lắp mạch trên một thiết bị.</p></div>
       <button id="tryBtn" class="primary-btn">Chơi thử bản web →</button>
     </div>
     <div class="cover-cards" aria-hidden="true"><img src="assets/cards/A01.png" alt=""><img src="assets/cards/A08.png" alt=""><img src="assets/cards/A14.png" alt=""></div>
@@ -19,7 +19,7 @@
   <main id="setup" class="setup-screen" hidden>
     <section class="panel setup-box">
       <h1>Chọn số người chơi</h1>
-      <p>Mỗi người nhận 4 thẻ. Các thẻ còn lại tạo thành chồng bài rút chung.</p>
+      <p>Mỗi người nhận 4 thẻ. Khi chơi 4 người, đặt máy giữa bàn và ngồi ở bốn phía. Giao diện xoay 90° sau mỗi lượt.</p>
       <div class="player-options" aria-label="Số người chơi">
         <button data-players="1" aria-label="1 người chơi">1</button>
         <button data-players="2" aria-label="2 người chơi">2</button>
@@ -42,7 +42,7 @@
   </header>
 
   <main class="app-shell">
-    <section class="panel turn-controls">
+    <section id="turnControls" class="panel turn-controls">
       <strong id="pileLabel"></strong>
       <button id="drawBtn" class="small-btn">Rút 1 thẻ</button>
       <button id="nextBtn" class="small-btn">Kết thúc lượt →</button>
@@ -89,7 +89,9 @@
           </div>
         </div>
 
-        <div id="board" class="board" aria-label="Bàn chơi 25 ô"></div>
+        <div class="board-row">
+          <div id="board" class="board" aria-label="Bàn chơi 25 ô"></div>
+        </div>
 
         <div class="legend">
           <span><i class="dot source"></i>Nguồn</span>
