@@ -153,3 +153,6 @@ body.table-game{overflow:hidden}
 @media(prefers-reduced-motion:no-preference){
   .table-game #playScreen{transition:rotate .24s ease-out}
 }
+
+a.primary-btn,a.small-btn,a.brand{display:inline-block;text-decoration:none}
+a.small-btn,a.brand{color:inherit}
