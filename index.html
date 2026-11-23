@@ -109,6 +109,14 @@
     #gioi-thieu article,.about-art{cursor:grab;user-select:none}
     #gioi-thieu.dragging article,#gioi-thieu.dragging .about-art{cursor:grabbing}
       #gioi-thieu.dragging .track-tip,#gioi-thieu.dragging .track-fill{transition:none}
+      #gioi-thieu{position:relative;isolation:isolate;overflow:clip}
+    .step-atmosphere,#gioi-thieu::before{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+    #gioi-thieu::before{content:"";background:radial-gradient(ellipse at 78% 45%,rgba(67,131,213,.24),transparent 54%);transform-origin:75% 45%}
+    #step-shape{opacity:.23}
+    @media(prefers-reduced-motion:no-preference){
+      #gioi-thieu::before{animation:about-glow 9s ease-in-out infinite alternate}
+      @keyframes about-glow{from{transform:translateX(-4%) scale(1)}to{transform:translateX(4%) scale(1.14)}}
+    }
   </style>
 </head>
 <body>
@@ -147,6 +155,9 @@
     <div class="cover-cards" aria-hidden="true"><img src="assets/cards/A01.png" alt=""><img src="assets/cards/A08.png" alt=""><img src="assets/cards/A14.png" alt=""></div>
   </section>
   <section id="gioi-thieu" data-project-panel aria-labelledby="about-title">
+    <svg class="step-atmosphere" aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <path id="step-shape"></path>
+    </svg>
     <article><h1 id="about-title">CIRCUIT QUEST</h1><div id="projectIntro">
       <div data-step><p><strong>Chạm vào linh kiện – Kết nối kiến thức</strong><br>Học mạch điện qua từng nước đi.</p>
       <p>Circuit Quest là bộ trò chơi học tập kết hợp bàn chơi vật lý và công nghệ nhận diện thẻ linh kiện, giúp người học khám phá kiến thức mạch điện thông qua thao tác lắp ghép và giải quyết nhiệm vụ. Những kiến thức về nguồn điện, điện trở, đèn và dụng cụ đo được đưa vào trải nghiệm trực quan, nơi người chơi có thể tự mình lựa chọn, sắp xếp và tìm ra cách mắc mạch phù hợp.</p></div>
@@ -214,13 +225,46 @@
     const steps = Array.from(document.querySelectorAll('[data-step]'));
     const art = document.querySelectorAll('.step-art');
     let step = 0;
+    // Each step uses the same cubic segments so the silhouette interpolates continuously.
+    const silhouettes = [
+      [54,0, 90,20,38,66,75,100],
+      [83,0, 33,28,95,64,49,100],
+      [38,0, 95,42,43,59,87,100],
+      [68,0, 26,47,84,72,57,100]
+    ];
+    const hues = [214,185,253,207];
+    let backdropStep = 0, backdropFrame = 0;
+    function paintBackdrop(value){
+      backdropStep = value;
+      const lo = Math.floor(value), hi = Math.min(lo+1, silhouettes.length-1);
+      const t = value-lo;
+      const a = silhouettes[lo].map((v,i)=>v+(silhouettes[hi][i]-v)*t);
+      const shape = document.querySelector('#step-shape');
+      shape.setAttribute('d', 'M'+a[0]+' '+a[1]+' C'+a.slice(2).join(' ')+' L100 100 L100 0 Z');
+      shape.setAttribute('fill','hsl('+(hues[lo]+(hues[hi]-hues[lo])*t)+' 65% 48%)');
+    }
+    function moveBackdrop(value,duration){
+      cancelAnimationFrame(backdropFrame);
+      if(!duration || value===backdropStep || window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+        paintBackdrop(value);
+        return;
+      }
+      const from=backdropStep, start=performance.now();
+      function tick(now){
+        const t=Math.min(1,(now-start)/duration);
+        paintBackdrop(from+(value-from)*(1-Math.pow(1-t,3)));
+        if(t<1)backdropFrame=requestAnimationFrame(tick);
+      }
+      backdropFrame=requestAnimationFrame(tick);
+    }
     let motions = [];
-    function openStep(index, animate = true) {
+    function openStep(index, animate = true, backdropDuration = animate ? 550 : 0) {
       if (index < 0 || index >= steps.length) return;
       for (const motion of motions) motion.cancel();
       motions = [];
       const previous = step;
       step = index;
+      moveBackdrop(index,backdropDuration);
       const track = document.querySelector('.step-track');
       track.style.setProperty('--step', step);
       track.querySelectorAll('circle').forEach((dot,i) => dot.classList.toggle('reached',i <= step));
@@ -281,7 +325,9 @@
           if (i !== step) slide.setAttribute('aria-hidden','true');
         });
       }
-      document.querySelector('.step-track').style.setProperty('--step', valid ? step - fraction : step);
+      const progress = valid ? step - fraction : step;
+      moveBackdrop(progress,0);
+      document.querySelector('.step-track').style.setProperty('--step',progress);
     }
     function finishSwipe(allowChange) {
       if (!swipe) return;
@@ -292,7 +338,7 @@
       if (!drag.started) return;
       const origin = step;
       const target = allowChange && Math.abs(drag.offset) >= .18 ? drag.next : origin;
-      openStep(target, false);
+      openStep(target, false, 160 + Math.abs(origin - target + drag.offset)*190);
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       for (const slides of [steps, art]) {
         slides.forEach((slide,i) => {
