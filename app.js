@@ -1760,7 +1760,6 @@ function renderTurn(){
   $('#drawBtn').textContent=drewThisTurn ? 'Đã rút lượt này' : 'Rút 1 thẻ';
 }
 
-let seatAngle=0;
 let phoneTurns=false;
 
 function announcePhoneTurn(){
@@ -1771,11 +1770,6 @@ function announcePhoneTurn(){
   window.setTimeout(()=>{
     if(notice.open)notice.close();
   },1600);
-}
-function orientTable(){
-  const screen=$('#playScreen');
-  screen.style.setProperty('--seat-angle',seatAngle+'deg');
-  screen.classList.toggle('side-seat',currentPlayer%2===1);
 }
 
 function resetCards(count){
@@ -1792,11 +1786,9 @@ function resetCards(count){
 
 function startSession(count){
   currentPlayer=0;
-  seatAngle=0;
   phoneTurns=window.matchMedia('(pointer: coarse) and (max-width: 700px), (pointer: coarse) and (max-height: 700px)').matches ||
     Boolean(window.frameElement?.hasAttribute('data-phone-preview'));
   document.body.classList.toggle('table-game',count===4);
-  orientTable();
   $('#setup').hidden=true;
   $('#playScreen').hidden=false;
   resetCards(count);
@@ -1827,8 +1819,6 @@ function nextPlayer(){
     return;
   }
   if(hands.length===4){
-    seatAngle+=90;
-    orientTable();
     $('#playScreen').scrollTop=0;
     $('#nextBtn').blur();
     return;
@@ -2056,8 +2046,8 @@ function scrollWhileDragging(){
   if(!gesture?.active || !gesture.fromStock)return;
   const table=hands.length===4;
   const {x,y}=gesture;
-  const edge=table && !phoneTurns ? [y,window.innerWidth-x,window.innerHeight-y,x][currentPlayer] : y;
-  const extent=table && !phoneTurns && currentPlayer%2 ? window.innerWidth : window.innerHeight;
+  const edge=y;
+  const extent=window.innerHeight;
   const step=edge<50 ? -12 : edge>extent-50 ? 12 : 0;
   if(step){
     const surface=table ? $('#playScreen') : window;
