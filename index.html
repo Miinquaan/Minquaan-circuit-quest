@@ -99,6 +99,12 @@
     .step-track .reached{fill:#ffdc5d;stroke:#ffdc5d}
     .track-tip{stroke:white;stroke-width:8;stroke-dasharray:.001 10;stroke-dashoffset:calc(-.9998 * var(--step,0))}
     @media(prefers-reduced-motion:no-preference){.track-fill,.track-tip{transition:stroke-dashoffset .48s ease-in-out}}
+      body{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+    body>main{flex:1}
+    body:has(#trang-chu:not([hidden])),body:has(#gioi-thieu:not([hidden])){background:#081c46}
+    #projectIntro,.about-art{display:grid;overflow:clip;min-width:0}
+    #projectIntro>[data-step],.about-art>.step-art{grid-area:1/1;min-width:0}
+    .step-track .track-fill,.step-track .track-tip{transition-duration:.55s}
   </style>
 </head>
 <body>
@@ -166,7 +172,6 @@
     <p>Chưa có thông tin.</p>
   </section>
   </main>
-  <footer class="footer">CIRCUIT QUEST • phiên bản web • không cần Python</footer>
   <script>
     const panels = Array.from(document.querySelectorAll('[data-project-panel]'));
     const links = document.querySelectorAll('.project-nav a');
@@ -205,26 +210,44 @@
     const steps = Array.from(document.querySelectorAll('[data-step]'));
     const art = document.querySelectorAll('.step-art');
     let step = 0;
-    function openStep(index) {
+    let motions = [];
+    function openStep(index, animate = true) {
+      if (index < 0 || index >= steps.length) return;
+      for (const motion of motions) motion.cancel();
+      motions = [];
       const previous = step;
       step = index;
       const track = document.querySelector('.step-track');
       track.style.setProperty('--step', step);
       track.querySelectorAll('circle').forEach((dot,i) => dot.classList.toggle('reached',i <= step));
-      steps.forEach((item,i) => { item.hidden = i !== step; art[i].hidden = item.hidden; });
-      if (previous !== step && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        for (const el of [steps[step], art[step]]) el.animate(
-          [{opacity:0,transform:'translateX('+(step>previous?18:-18)+'px)'},{opacity:1,transform:'translateX(0)'}],
-          {duration:320,easing:'ease-out'});
+      steps.forEach((item,i) => { item.hidden = i !== step; art[i].hidden = item.hidden; item.removeAttribute('aria-hidden'); art[i].removeAttribute('aria-hidden'); });
+      if (animate && previous !== step && steps[step].animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const direction = Math.sign(step - previous);
+        for (const slides of [steps, art]) {
+          const outgoing = slides[previous], incoming = slides[step];
+          outgoing.hidden = false;
+          outgoing.setAttribute('aria-hidden','true');
+          incoming.removeAttribute('aria-hidden');
+          const timing = {duration:550,easing:'cubic-bezier(.32,0,.18,1)'};
+          const exit = outgoing.animate([
+            {transform:'translateX(0)', opacity:1},
+            {transform:'translateX('+(-direction*100)+'%)', opacity:0}
+          ], timing);
+          exit.onfinish = () => { if (step !== previous) outgoing.hidden = true; };
+          motions.push(exit, incoming.animate([
+            {transform:'translateX('+(direction*100)+'%)', opacity:.2},
+            {transform:'translateX(0)', opacity:1}
+          ], timing));
+        }
       }
       document.querySelector('#aboutPrev').disabled = step === 0;
       document.querySelector('#aboutNext').disabled = step === steps.length - 1;
       document.querySelector('#aboutCount').textContent = (step + 1) + ' / ' + steps.length;
     }
-    document.querySelector('#aboutPrev').onclick = () => { openStep(step - 1); window.scrollTo(0,0); };
-    document.querySelector('#aboutNext').onclick = () => { openStep(step + 1); window.scrollTo(0,0); };
+    document.querySelector('#aboutPrev').onclick = () => { openStep(step - 1); window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}); };
+    document.querySelector('#aboutNext').onclick = () => { openStep(step + 1); window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}); };
     function showSection() {
-      openStep(0);
+      openStep(0, false);
       setPreview(null);
       const current = panels.find(panel => '#' + panel.id === location.hash) || panels[0];
       for (const panel of panels) panel.hidden = panel !== current;
