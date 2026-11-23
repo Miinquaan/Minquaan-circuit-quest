@@ -52,10 +52,25 @@
       #trang-chu::before{inset:14% 8%}
       #trang-chu::after{background:linear-gradient(180deg,rgba(6,22,58,.67),rgba(8,28,70,.22))}
     }
-    #projectIntro{text-align:start;line-height:1.55}
-    #projectIntro p{font-size:clamp(16px,1.2vw,18px)}
-    #gioi-thieu{max-width:76ch;margin:auto;padding:clamp(20px,5vw,56px)}
-    #gioi-thieu h1{color:#173b8f}
+    #gioi-thieu{
+      width:100%;padding:clamp(24px,4vw,72px);box-sizing:border-box
+    }
+    #gioi-thieu:not([hidden]){
+      display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);
+      gap:clamp(20px,3vw,58px);align-items:start
+    }
+    #gioi-thieu h1{color:#173b8f;margin:0 0 .45em;font-size:clamp(36px,4vw,72px);line-height:1.1}
+    #projectIntro{text-align:start;line-height:1.65}
+    #projectIntro p{font-size:clamp(19px,1.55vw,28px);margin:.8em 0}
+    #projectIntro h2{font-size:clamp(25px,2.1vw,38px);line-height:1.22;margin:1.2em 0 .4em}
+    .about-board{position:sticky;top:110px;margin:0;display:grid;place-items:center;
+      min-height:45vh;background:#102b58;border-radius:20px;padding:5%;isolation:isolate}
+    .about-board img{width:100%;height:auto;mix-blend-mode:luminosity;opacity:.68}
+    @media(max-width:700px){
+      #gioi-thieu:not([hidden]){grid-template-columns:minmax(0,1fr)}
+      .about-board{position:static;min-height:0}
+      .about-board img{max-width:340px}
+    }
     #trang-chu .primary-btn{margin-top:16px}
   </style>
 </head>
@@ -95,6 +110,7 @@
     <div class="cover-cards" aria-hidden="true"><img src="assets/cards/A01.png" alt=""><img src="assets/cards/A08.png" alt=""><img src="assets/cards/A14.png" alt=""></div>
   </section>
   <section id="gioi-thieu" data-project-panel aria-labelledby="about-title">
+    <article>
     <h1 id="about-title">CIRCUIT QUEST</h1>
     <div id="projectIntro">
       <p><strong>Chạm vào linh kiện – Kết nối kiến thức</strong><br>Học mạch điện qua từng nước đi.</p>
@@ -108,6 +124,8 @@
       <h2>Học chủ động, chơi cùng nhau</h2>
       <p>Circuit Quest được thiết kế hướng đến học sinh THPT, có thể sử dụng trong hoạt động học tập cá nhân, thảo luận nhóm hoặc trải nghiệm STEM. Người chơi cùng trao đổi ý tưởng, giải thích cách mắc mạch và phối hợp để hoàn thành nhiệm vụ; giáo viên có thêm một học cụ trực quan để tổ chức hoạt động vận dụng kiến thức.</p>
     </div>
+    </article>
+    <figure class="about-board"><img src="assets/ban-choi-trong-suot.png" alt="Mô hình bàn chơi Circuit Quest với 25 ô lắp thẻ linh kiện" loading="lazy"></figure>
   </section>
   <section id="luat-choi" data-project-panel aria-labelledby="rules-title">
     <h2 id="rules-title">Luật chơi</h2>
