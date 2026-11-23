@@ -213,3 +213,16 @@ a.small-btn,a.brand{color:inherit}
   .inventory-panel .card-btn{min-height:110px}
   .board-row .turn-controls button{font-size:15px}
 }
+
+#phoneTurn{
+  position:fixed;inset:0 0 auto;margin:0;width:100%;max-width:none;
+  height:50vh;height:50dvh;max-height:none;box-sizing:border-box;
+  border:0;border-radius:0 0 20px 20px;background:var(--turn-color);color:white;
+  padding:20px;text-align:center;font-size:clamp(24px,6vw,44px);font-weight:800
+}
+#phoneTurn[open]{display:grid;place-items:center}
+#phoneTurn::backdrop{background:rgb(8 20 39 / .24)}
+@media(prefers-reduced-motion:no-preference){
+  #phoneTurn[open]{animation:phone-turn-in .24s ease-out}
+  @keyframes phone-turn-in{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+}
