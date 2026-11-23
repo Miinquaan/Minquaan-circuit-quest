@@ -160,20 +160,17 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
 }
 body.table-game{overflow:hidden}
 .table-game #playScreen{
-  position:fixed;left:50%;top:50%;translate:-50% -50%;rotate:var(--seat-angle,0deg);
+  position:fixed;left:50%;top:50%;translate:-50% -50%;
   width:100vw;height:100vh;width:100dvw;height:100dvh;
   background:var(--bg);overflow:auto;overscroll-behavior:contain;container-type:inline-size;
 }
-.table-game #playScreen.side-seat{width:100vh;height:100vw;width:100dvh;height:100dvw}
 .table-game .footer{display:none}
 .table-game .board-header{flex-direction:row;align-items:center;flex-wrap:wrap;gap:4px}
 .table-game .board-actions{width:auto;gap:4px}
 .table-game .board-actions button{flex:auto;font-size:11px;min-height:36px;padding:4px 8px}
 .table-game .topbar{padding:6px 12px}
 .table-game .brand{font-size:16px}
-@media(prefers-reduced-motion:no-preference){
-  .table-game #playScreen{transition:rotate .24s ease-out}
-}
+
 
 a.primary-btn,a.small-btn,a.brand{display:inline-block;text-decoration:none}
 a.small-btn,a.brand{color:inherit}
