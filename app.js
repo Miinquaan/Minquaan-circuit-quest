@@ -1762,7 +1762,7 @@ function renderTurn(){
 
 let phoneTurns=false;
 
-function announcePhoneTurn(){
+function announceTurn(){
   const notice=$('#phoneTurn');
   notice.textContent='Đến lượt '+turnName();
   notice.showModal();
@@ -1814,22 +1814,17 @@ function nextPlayer(){
   choosingRemoval=false;
   setResult('neutral','Đến lượt '+turnName()+'.');
   renderAll();
-  if(phoneTurns && hands.length>1){
-    announcePhoneTurn();
-    return;
-  }
-  if(hands.length===4){
+  if(!phoneTurns && hands.length===4){
     $('#playScreen').scrollTop=0;
     $('#nextBtn').blur();
-    return;
-  }
-  if(hands.length>1){
+  }else if(!phoneTurns && hands.length>1){
     $('#playScreen').hidden=true;
     $('#handoffTitle').textContent='Lượt của '+turnName();
     $('#handoff').hidden=false;
     $('#readyBtn').focus();
+    window.scrollTo(0,0);
   }
-  window.scrollTo(0,0);
+  announceTurn();
 }
 
 function renderInventory(){
