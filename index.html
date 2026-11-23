@@ -105,6 +105,9 @@
     #projectIntro,.about-art{display:grid;overflow:clip;min-width:0}
     #projectIntro>[data-step],.about-art>.step-art{grid-area:1/1;min-width:0}
     .step-track .track-fill,.step-track .track-tip{transition-duration:.55s}
+      #gioi-thieu{touch-action:pan-y pinch-zoom}
+    #gioi-thieu article,.about-art{cursor:grab;user-select:none}
+    #gioi-thieu.dragging article,#gioi-thieu.dragging .about-art{cursor:grabbing}
   </style>
 </head>
 <body>
@@ -244,8 +247,47 @@
       document.querySelector('#aboutNext').disabled = step === steps.length - 1;
       document.querySelector('#aboutCount').textContent = (step + 1) + ' / ' + steps.length;
     }
-    document.querySelector('#aboutPrev').onclick = () => { openStep(step - 1); window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}); };
-    document.querySelector('#aboutNext').onclick = () => { openStep(step + 1); window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}); };
+    function advanceStep(direction) {
+      const next = step + direction;
+      if (next < 0 || next >= steps.length) return;
+      openStep(next);
+      window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
+    }
+    document.querySelector('#aboutPrev').onclick = () => advanceStep(-1);
+    document.querySelector('#aboutNext').onclick = () => advanceStep(1);
+    const about = document.querySelector('#gioi-thieu');
+    let swipe = null;
+    function clearSwipe() {
+      if (!swipe) return;
+      const id = swipe.id;
+      swipe = null;
+      about.classList.remove('dragging');
+      if (about.hasPointerCapture(id)) about.releasePointerCapture(id);
+    }
+    about.addEventListener('dragstart', event => {
+      if (event.target.closest('.about-art img')) event.preventDefault();
+    });
+    about.addEventListener('pointerdown', event => {
+      if (!event.isPrimary) { clearSwipe(); return; }
+      if (event.button !== 0 || event.target.closest('button,a,input')) return;
+      swipe = {id:event.pointerId, x:event.clientX, y:event.clientY};
+      about.setPointerCapture(event.pointerId);
+    });
+    about.addEventListener('pointermove', event => {
+      if (event.pointerId !== swipe?.id) return;
+      const dx = Math.abs(event.clientX - swipe.x), dy = Math.abs(event.clientY - swipe.y);
+      if (dy > 12 && dy > dx) clearSwipe();
+      else if (dx > 10) about.classList.add('dragging');
+    });
+    about.addEventListener('pointerup', event => {
+      if (event.pointerId !== swipe?.id) return;
+      const dx = event.clientX - swipe.x, dy = event.clientY - swipe.y;
+      clearSwipe();
+      if (Math.abs(dx) >= 44 && Math.abs(dx) > 1.3 * Math.abs(dy)) advanceStep(dx < 0 ? 1 : -1);
+    });
+    for (const type of ['pointercancel','lostpointercapture']) {
+      about.addEventListener(type,event => { if (event.pointerId === swipe?.id) clearSwipe(); });
+    }
     function showSection() {
       openStep(0, false);
       setPreview(null);
