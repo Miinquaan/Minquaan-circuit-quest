@@ -125,6 +125,11 @@
     .page-copy{line-height:1.65;min-width:0}
     .step-controls{padding:12px 0 24px}
     @media(max-width:700px){.about-page{grid-template-columns:minmax(0,1fr);align-content:start}}
+      @media(prefers-reduced-motion:no-preference){
+      .about-page{transform-origin:var(--hinge,center) center;transform:perspective(1600px) rotateY(var(--tilt,0deg))}
+      .about-page::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+        opacity:var(--shade,0);background:linear-gradient(var(--light-direction,90deg),#031024 0%,rgba(3,16,36,.55) 5%,transparent 30%)}
+    }
   </style>
 </head>
 <body>
@@ -238,6 +243,16 @@
       backdropStep = value;
       const lo = Math.floor(value), hi = Math.min(lo+1, silhouettes.length-1);
       const t = value-lo;
+      // The facing edges lift together and settle flat exactly at each stop.
+      const lift = Math.sin(Math.PI*t);
+      for (const [i,page] of steps.entries()) {
+        const side = i===lo ? 1 : -1;
+        const depth = i===lo || i===hi ? lift : 0;
+        page.style.setProperty('--tilt',(side*depth*3.5)+'deg');
+        page.style.setProperty('--shade',String(depth*.34));
+        page.style.setProperty('--hinge',side===1?'right':'left');
+        page.style.setProperty('--light-direction',side===1?'270deg':'90deg');
+      }
       const a = silhouettes[lo].map((v,i)=>v+(silhouettes[hi][i]-v)*t);
       for (const shape of shapes) {
       shape.setAttribute('d', 'M'+a[0]+' '+a[1]+' C'+a.slice(2).join(' ')+' L100 100 L100 0 Z');
