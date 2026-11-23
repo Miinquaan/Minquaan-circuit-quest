@@ -212,14 +212,24 @@ a.small-btn,a.brand{color:inherit}
 }
 
 #phoneTurn{
-  position:fixed;inset:0 0 auto;margin:0;width:100%;max-width:none;
-  height:50vh;height:50dvh;max-height:none;box-sizing:border-box;
-  border:0;border-radius:0 0 20px 20px;background:var(--turn-color);color:white;
-  padding:20px;text-align:center;font-size:clamp(24px,6vw,44px);font-weight:800
+  position:fixed;inset:0;margin:auto;box-sizing:border-box;
+  width:min(84vw,36rem);height:clamp(8rem,36dvh,16rem);max-height:84dvh;
+  border:3px solid rgb(255 255 255 / .82);border-radius:4rem 5rem 4rem 5rem;
+  color:white;background-color:var(--turn-color);
+  background-image:radial-gradient(circle at 5% 100%,rgb(255 255 255 / .14) 0 17%,transparent 17.5%),
+    radial-gradient(circle at 100% 0%,rgb(255 255 255 / .12) 0 22%,transparent 22.5%);
+  box-shadow:0 14px 40px rgb(8 20 39 / .32),inset 0 -5px 0 rgb(0 0 0 / .12);
+  padding:clamp(16px,5vw,36px);text-align:center;font-size:clamp(24px,5vw,42px);
+  font-weight:800;line-height:1.2;text-wrap:balance
 }
 #phoneTurn[open]{display:grid;place-items:center}
-#phoneTurn::backdrop{background:rgb(8 20 39 / .24)}
+#phoneTurn::backdrop{background:rgb(8 20 39 / .32)}
 @media(prefers-reduced-motion:no-preference){
-  #phoneTurn[open]{animation:phone-turn-in .24s ease-out}
-  @keyframes phone-turn-in{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+  #phoneTurn[open]{animation:turn-pop .54s ease-out both}
+  @keyframes turn-pop{
+    0%{opacity:0;transform:translateY(18px) scale(.68)}
+    52%{opacity:1;transform:translateY(-5px) scale(1.06)}
+    76%{transform:translateY(2px) scale(.98)}
+    100%{transform:translateY(0) scale(1)}
+  }
 }
