@@ -63,13 +63,18 @@
     #projectIntro{text-align:start;line-height:1.65}
     #projectIntro p{font-size:clamp(19px,1.55vw,28px);margin:.8em 0}
     #projectIntro h2{font-size:clamp(25px,2.1vw,38px);line-height:1.22;margin:1.2em 0 .4em}
-    .about-board{position:sticky;top:110px;margin:0;overflow:hidden;border-radius:20px}
-    .about-board img{display:block;width:100%;height:auto}
-    @media(max-width:700px){
-      #gioi-thieu:not([hidden]){grid-template-columns:minmax(0,1fr)}
-      .about-board{position:static;min-height:0}
-
-    }
+    .step-art{margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;gap:10px}
+    .step-art[hidden]{display:none}
+    .step-art img{display:block;width:100%;height:auto;border-radius:8px}
+    .art-0,.art-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .art-0 img,.art-3>img:first-child{grid-column:1/-1}
+    .art-3>img:first-child{max-height:260px;object-fit:contain}
+    .mission-crop{display:block;position:relative;overflow:hidden;aspect-ratio:1;border-radius:8px}
+    .mission-crop img{position:absolute;max-width:none;border-radius:0}
+    .step-controls{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:16px;color:#173b8f;font-weight:700}
+    .step-controls button{width:52px;height:52px;border-radius:50%;border:0;background:#173b8f;color:white;font-size:26px}
+    .step-controls button:disabled{opacity:.35}
+    @media(max-width:700px){#gioi-thieu:not([hidden]){grid-template-columns:minmax(0,1fr)}}
     #trang-chu .primary-btn{margin-top:16px}
   </style>
 </head>
@@ -109,22 +114,23 @@
     <div class="cover-cards" aria-hidden="true"><img src="assets/cards/A01.png" alt=""><img src="assets/cards/A08.png" alt=""><img src="assets/cards/A14.png" alt=""></div>
   </section>
   <section id="gioi-thieu" data-project-panel aria-labelledby="about-title">
-    <article>
-    <h1 id="about-title">CIRCUIT QUEST</h1>
-    <div id="projectIntro">
-      <p><strong>Chạm vào linh kiện – Kết nối kiến thức</strong><br>Học mạch điện qua từng nước đi.</p>
-      <p>Circuit Quest là bộ trò chơi học tập kết hợp bàn chơi vật lý và công nghệ nhận diện thẻ linh kiện, giúp người học khám phá kiến thức mạch điện thông qua thao tác lắp ghép và giải quyết nhiệm vụ. Những kiến thức về nguồn điện, điện trở, đèn và dụng cụ đo được đưa vào trải nghiệm trực quan, nơi người chơi có thể tự mình lựa chọn, sắp xếp và tìm ra cách mắc mạch phù hợp.</p>
-      <h2>Một bàn chơi, nhiều cách khám phá</h2>
+    <article><h1 id="about-title">CIRCUIT QUEST</h1><div id="projectIntro">
+      <div data-step><p><strong>Chạm vào linh kiện – Kết nối kiến thức</strong><br>Học mạch điện qua từng nước đi.</p>
+      <p>Circuit Quest là bộ trò chơi học tập kết hợp bàn chơi vật lý và công nghệ nhận diện thẻ linh kiện, giúp người học khám phá kiến thức mạch điện thông qua thao tác lắp ghép và giải quyết nhiệm vụ. Những kiến thức về nguồn điện, điện trở, đèn và dụng cụ đo được đưa vào trải nghiệm trực quan, nơi người chơi có thể tự mình lựa chọn, sắp xếp và tìm ra cách mắc mạch phù hợp.</p></div>
+      <div data-step hidden><h2>Một bàn chơi, nhiều cách khám phá</h2>
       <p>Trên bàn chơi 25 ô, mỗi thẻ linh kiện là một phần của mạch điện do bạn xây dựng. Từ nguồn điện, điện trở, bóng đèn đến dây dẫn, ampe kế và vôn kế, các thẻ mang đến cơ hội vận dụng kiến thức đã học vào từng tình huống cụ thể.</p>
-      <p>Hệ thống điện tử nhận diện thẻ khi được đặt lên bàn, kết hợp màn hình hiển thị nhiệm vụ để kết nối thao tác thực tế với nội dung học tập.</p>
-      <h2>Thử thách theo từng cấp độ</h2>
+      <p>Hệ thống điện tử nhận diện thẻ khi được đặt lên bàn, kết hợp màn hình hiển thị nhiệm vụ để kết nối thao tác thực tế với nội dung học tập.</p></div>
+      <div data-step hidden><h2>Thử thách theo từng cấp độ</h2>
       <p>Circuit Quest có ba mức độ: Dễ, Trung bình và Khó, giúp người chơi từng bước tiếp cận các yêu cầu lắp ghép và tính toán mạch điện. Mỗi nhiệm vụ là một cơ hội để quan sát, suy luận, thử nghiệm và điều chỉnh phương án của mình.</p>
-      <p>Niềm vui không chỉ nằm ở việc hoàn thành thử thách, mà còn ở khoảnh khắc bạn hiểu vì sao mạch điện hoạt động như vậy.</p>
-      <h2>Học chủ động, chơi cùng nhau</h2>
-      <p>Circuit Quest được thiết kế hướng đến học sinh THPT, có thể sử dụng trong hoạt động học tập cá nhân, thảo luận nhóm hoặc trải nghiệm STEM. Người chơi cùng trao đổi ý tưởng, giải thích cách mắc mạch và phối hợp để hoàn thành nhiệm vụ; giáo viên có thêm một học cụ trực quan để tổ chức hoạt động vận dụng kiến thức.</p>
-    </div>
-    </article>
-    <figure class="about-board"><img src="assets/ban-choi-nen.png" width="1312" height="1199" alt="Mô hình bàn chơi Circuit Quest với 25 ô lắp thẻ linh kiện" loading="lazy"></figure>
+      <p>Niềm vui không chỉ nằm ở việc hoàn thành thử thách, mà còn ở khoảnh khắc bạn hiểu vì sao mạch điện hoạt động như vậy.</p></div>
+      <div data-step hidden><h2>Học chủ động, chơi cùng nhau</h2>
+      <p>Circuit Quest được thiết kế hướng đến học sinh THPT, có thể sử dụng trong hoạt động học tập cá nhân, thảo luận nhóm hoặc trải nghiệm STEM. Người chơi cùng trao đổi ý tưởng, giải thích cách mắc mạch và phối hợp để hoàn thành nhiệm vụ; giáo viên có thêm một học cụ trực quan để tổ chức hoạt động vận dụng kiến thức.</p></div>
+    </div></article>
+    <div class="about-art"><figure class="step-art art-0"><img src="assets/ban-choi-nen.png" alt="Hộp bàn chơi Circuit Quest"></figure>
+<figure class="step-art art-1" hidden><img src="assets/cards/A01.png" alt="Thẻ nguồn điện"><img src="assets/cards/A08.png" alt="Thẻ đèn"><img src="assets/cards/A14.png" alt="Thẻ ampe kế"></figure>
+<figure class="step-art art-2" hidden><span class="mission-crop"><img src="assets/missions/easy.png" alt="Thẻ nhiệm vụ Dễ" style="width:115.94488188976378%;left:-6.692913385826771%;top:-9.62671905697446%"></span><span class="mission-crop"><img src="assets/missions/medium.png" alt="Thẻ nhiệm vụ Trung bình" style="width:114.1732283464567%;left:-4.921259842519685%;top:-4.724409448818897%"></span><span class="mission-crop"><img src="assets/missions/hard.png" alt="Thẻ nhiệm vụ Khó" style="width:110.23622047244095%;left:-4.921259842519685%;top:-6.102362204724409%"></span></figure>
+<figure class="step-art art-3" hidden><img src="assets/ban-choi-nen.png" alt="Hộp bàn chơi Circuit Quest"><img src="assets/cards/A01.png" alt="Thẻ nguồn điện"><img src="assets/cards/A08.png" alt="Thẻ đèn"><img src="assets/cards/A14.png" alt="Thẻ ampe kế"><span class="mission-crop"><img src="assets/missions/easy.png" alt="Thẻ nhiệm vụ Dễ" style="width:115.94488188976378%;left:-6.692913385826771%;top:-9.62671905697446%"></span><span class="mission-crop"><img src="assets/missions/medium.png" alt="Thẻ nhiệm vụ Trung bình" style="width:114.1732283464567%;left:-4.921259842519685%;top:-4.724409448818897%"></span><span class="mission-crop"><img src="assets/missions/hard.png" alt="Thẻ nhiệm vụ Khó" style="width:110.23622047244095%;left:-4.921259842519685%;top:-6.102362204724409%"></span></figure></div>
+    <div class="step-controls"><button type="button" id="aboutPrev" aria-label="Mục trước" disabled>←</button><span id="aboutCount" aria-live="polite">1 / 4</span><button type="button" id="aboutNext" aria-label="Mục tiếp theo">→</button></div>
   </section>
   <section id="luat-choi" data-project-panel aria-labelledby="rules-title">
     <h2 id="rules-title">Luật chơi</h2>
@@ -173,7 +179,20 @@
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape') setPreview(null);
     });
+    const steps = Array.from(document.querySelectorAll('[data-step]'));
+    const art = document.querySelectorAll('.step-art');
+    let step = 0;
+    function openStep(index) {
+      step = index;
+      steps.forEach((item,i) => { item.hidden = i !== step; art[i].hidden = item.hidden; });
+      document.querySelector('#aboutPrev').disabled = step === 0;
+      document.querySelector('#aboutNext').disabled = step === steps.length - 1;
+      document.querySelector('#aboutCount').textContent = (step + 1) + ' / ' + steps.length;
+    }
+    document.querySelector('#aboutPrev').onclick = () => { openStep(step - 1); window.scrollTo(0,0); };
+    document.querySelector('#aboutNext').onclick = () => { openStep(step + 1); window.scrollTo(0,0); };
     function showSection() {
+      openStep(0);
       setPreview(null);
       const current = panels.find(panel => '#' + panel.id === location.hash) || panels[0];
       for (const panel of panels) panel.hidden = panel !== current;
