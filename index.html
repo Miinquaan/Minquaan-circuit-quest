@@ -63,13 +63,12 @@
     #projectIntro{text-align:start;line-height:1.65}
     #projectIntro p{font-size:clamp(19px,1.55vw,28px);margin:.8em 0}
     #projectIntro h2{font-size:clamp(25px,2.1vw,38px);line-height:1.22;margin:1.2em 0 .4em}
-    .about-board{position:sticky;top:110px;margin:0;display:grid;place-items:center;
-      min-height:45vh;background:#102b58;border-radius:20px;padding:5%;isolation:isolate}
-    .about-board img{width:100%;height:auto;mix-blend-mode:luminosity;opacity:.68}
+    .about-board{position:sticky;top:110px;margin:0;overflow:hidden;border-radius:20px}
+    .about-board img{display:block;width:100%;height:auto}
     @media(max-width:700px){
       #gioi-thieu:not([hidden]){grid-template-columns:minmax(0,1fr)}
       .about-board{position:static;min-height:0}
-      .about-board img{max-width:340px}
+
     }
     #trang-chu .primary-btn{margin-top:16px}
   </style>
@@ -125,7 +124,7 @@
       <p>Circuit Quest được thiết kế hướng đến học sinh THPT, có thể sử dụng trong hoạt động học tập cá nhân, thảo luận nhóm hoặc trải nghiệm STEM. Người chơi cùng trao đổi ý tưởng, giải thích cách mắc mạch và phối hợp để hoàn thành nhiệm vụ; giáo viên có thêm một học cụ trực quan để tổ chức hoạt động vận dụng kiến thức.</p>
     </div>
     </article>
-    <figure class="about-board"><img src="assets/ban-choi-trong-suot.png" alt="Mô hình bàn chơi Circuit Quest với 25 ô lắp thẻ linh kiện" loading="lazy"></figure>
+    <figure class="about-board"><img src="assets/ban-choi-nen.png" width="1312" height="1199" alt="Mô hình bàn chơi Circuit Quest với 25 ô lắp thẻ linh kiện" loading="lazy"></figure>
   </section>
   <section id="luat-choi" data-project-panel aria-labelledby="rules-title">
     <h2 id="rules-title">Luật chơi</h2>
