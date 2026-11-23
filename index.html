@@ -76,6 +76,29 @@
     .step-controls button:disabled{opacity:.35}
     @media(max-width:700px){#gioi-thieu:not([hidden]){grid-template-columns:minmax(0,1fr)}}
     #trang-chu .primary-btn{margin-top:16px}
+      #gioi-thieu{background:#081c46;color:#edf3ff;min-height:80vh}
+    #gioi-thieu h1,#projectIntro h2{color:white}
+    #projectIntro strong{color:#ffdc5d}
+    .about-art{min-width:0;align-self:center}
+    .art-1,.art-2{display:flex;align-items:center;justify-content:center;padding:12% 5%}
+    .art-1>img,.art-2>.mission-crop{flex:0 0 37%;width:37%;min-width:0;background:white;box-shadow:0 8px 20px #0005}
+    .art-1>img{aspect-ratio:2/3;object-fit:contain}
+    .art-1>:first-child,.art-2>:first-child{transform:translate(10%,7%) rotate(-13deg)}
+    .art-1>:nth-child(2),.art-2>:nth-child(2){z-index:1}
+    .art-1>:last-child,.art-2>:last-child{transform:translate(-10%,7%) rotate(13deg)}
+    .art-1,.art-2{gap:0}
+    .step-art[hidden]{display:none}
+    .step-controls{color:white;align-self:end;gap:clamp(6px,2vw,20px)}
+    .step-controls button{flex-shrink:0;border:1px solid #98b7f0}
+    .step-track{width:min(40vw,260px)}
+    .step-track svg{display:block;width:100%;overflow:visible}
+    .step-track path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .track-base{stroke:#54719c;stroke-width:3}
+    .track-fill{stroke:#ffdc5d;stroke-width:3;stroke-dasharray:3 3;stroke-dashoffset:calc(3 - var(--step,0))}
+    .step-track circle{fill:#081c46;stroke:#a4b8da;stroke-width:2}
+    .step-track .reached{fill:#ffdc5d;stroke:#ffdc5d}
+    .track-tip{stroke:white;stroke-width:8;stroke-dasharray:.001 10;stroke-dashoffset:calc(-.9998 * var(--step,0))}
+    @media(prefers-reduced-motion:no-preference){.track-fill,.track-tip{transition:stroke-dashoffset .48s ease-in-out}}
   </style>
 </head>
 <body>
@@ -130,7 +153,7 @@
 <figure class="step-art art-1" hidden><img src="assets/cards/A01.png" alt="Thẻ nguồn điện"><img src="assets/cards/A08.png" alt="Thẻ đèn"><img src="assets/cards/A14.png" alt="Thẻ ampe kế"></figure>
 <figure class="step-art art-2" hidden><span class="mission-crop"><img src="assets/missions/easy.png" alt="Thẻ nhiệm vụ Dễ" style="width:115.94488188976378%;left:-6.692913385826771%;top:-9.62671905697446%"></span><span class="mission-crop"><img src="assets/missions/medium.png" alt="Thẻ nhiệm vụ Trung bình" style="width:114.1732283464567%;left:-4.921259842519685%;top:-4.724409448818897%"></span><span class="mission-crop"><img src="assets/missions/hard.png" alt="Thẻ nhiệm vụ Khó" style="width:110.23622047244095%;left:-4.921259842519685%;top:-6.102362204724409%"></span></figure>
 <figure class="step-art art-3" hidden><img src="assets/ban-choi-nen.png" alt="Hộp bàn chơi Circuit Quest"><img src="assets/cards/A01.png" alt="Thẻ nguồn điện"><img src="assets/cards/A08.png" alt="Thẻ đèn"><img src="assets/cards/A14.png" alt="Thẻ ampe kế"><span class="mission-crop"><img src="assets/missions/easy.png" alt="Thẻ nhiệm vụ Dễ" style="width:115.94488188976378%;left:-6.692913385826771%;top:-9.62671905697446%"></span><span class="mission-crop"><img src="assets/missions/medium.png" alt="Thẻ nhiệm vụ Trung bình" style="width:114.1732283464567%;left:-4.921259842519685%;top:-4.724409448818897%"></span><span class="mission-crop"><img src="assets/missions/hard.png" alt="Thẻ nhiệm vụ Khó" style="width:110.23622047244095%;left:-4.921259842519685%;top:-6.102362204724409%"></span></figure></div>
-    <div class="step-controls"><button type="button" id="aboutPrev" aria-label="Mục trước" disabled>←</button><span id="aboutCount" aria-live="polite">1 / 4</span><button type="button" id="aboutNext" aria-label="Mục tiếp theo">→</button></div>
+    <div class="step-controls"><button type="button" id="aboutPrev" aria-label="Mục trước" disabled>←</button><div class="step-track" aria-hidden="true"><svg viewBox="0 0 204 46"><path class="track-base" d="M12 33 H35 L49 13 H72 H95 L109 33 H132 H155 L169 13 H192"/><path class="track-fill" pathLength="3" d="M12 33 H35 L49 13 H72 H95 L109 33 H132 H155 L169 13 H192"/><circle cx="12" cy="33" r="5"/><circle cx="72" cy="13" r="5"/><circle cx="132" cy="33" r="5"/><circle cx="192" cy="13" r="5"/><path class="track-tip" pathLength="3" d="M12 33 H35 L49 13 H72 H95 L109 33 H132 H155 L169 13 H192"/></svg></div><span id="aboutCount" aria-live="polite">1 / 4</span><button type="button" id="aboutNext" aria-label="Mục tiếp theo">→</button></div>
   </section>
   <section id="luat-choi" data-project-panel aria-labelledby="rules-title">
     <h2 id="rules-title">Luật chơi</h2>
@@ -183,8 +206,17 @@
     const art = document.querySelectorAll('.step-art');
     let step = 0;
     function openStep(index) {
+      const previous = step;
       step = index;
+      const track = document.querySelector('.step-track');
+      track.style.setProperty('--step', step);
+      track.querySelectorAll('circle').forEach((dot,i) => dot.classList.toggle('reached',i <= step));
       steps.forEach((item,i) => { item.hidden = i !== step; art[i].hidden = item.hidden; });
+      if (previous !== step && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        for (const el of [steps[step], art[step]]) el.animate(
+          [{opacity:0,transform:'translateX('+(step>previous?18:-18)+'px)'},{opacity:1,transform:'translateX(0)'}],
+          {duration:320,easing:'ease-out'});
+      }
       document.querySelector('#aboutPrev').disabled = step === 0;
       document.querySelector('#aboutNext').disabled = step === steps.length - 1;
       document.querySelector('#aboutCount').textContent = (step + 1) + ' / ' + steps.length;
