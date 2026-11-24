@@ -118,17 +118,15 @@
       @keyframes about-glow{from{transform:translateX(-4%) scale(1)}to{transform:translateX(4%) scale(1.14)}}
     }
       #gioi-thieu:not([hidden]){display:block;padding:0}
-    .page-window{overflow:clip;width:100%;container-type:inline-size;perspective:1800px}
-    .page-strip{display:grid;width:100%;align-items:stretch;transform-style:preserve-3d}
-    .about-page{grid-area:1/1;backface-visibility:hidden}
-    @media(prefers-reduced-motion:reduce){.about-page[inert]{visibility:hidden!important}}
+    .page-window{overflow:clip;width:100%}
+    .page-strip{display:flex;width:100%;align-items:stretch}
     .about-page{position:relative;isolation:isolate;overflow:hidden;flex:0 0 100%;box-sizing:border-box;padding:clamp(20px,4vw,72px);display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:3vw;align-content:center;min-height:calc(100svh - 170px);background:#081c46}
     .about-page:nth-child(2){background:#092438}.about-page:nth-child(3){background:#141e44}.about-page:nth-child(4){background:#09233e}
     .page-copy{line-height:1.65;min-width:0}
     .step-controls{padding:12px 0 24px}
     @media(max-width:700px){.about-page{grid-template-columns:minmax(0,1fr);align-content:start}}
       @media(prefers-reduced-motion:no-preference){
-      .about-page{transform-origin:center;transform:translateZ(-50cqw) rotateY(var(--face-angle,0deg)) translateZ(50cqw)}
+      .about-page{transform-origin:var(--hinge,center) center;transform:perspective(1600px) rotateY(var(--tilt,0deg))}
       .about-page::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
         opacity:var(--shade,0);background:linear-gradient(var(--light-direction,90deg),#031024 0%,rgba(3,16,36,.55) 5%,transparent 30%)}
     }
@@ -261,8 +259,7 @@
         const depth = i===lo || i===hi ? lift : 0;
         page.style.setProperty('--trace-opacity',String(side===1 ? depth : 0));
         page.style.setProperty('--pulse-y',(t*100)+'%');
-        page.style.setProperty('--face-angle', ((i-value)*90)+'deg');
-        page.style.visibility = Math.abs(i-value)<1 ? 'visible' : 'hidden';
+        page.style.setProperty('--tilt',(side*depth*3.5)+'deg');
         page.style.setProperty('--shade',String(depth*.34));
         page.style.setProperty('--hinge',side===1?'right':'left');
         page.style.setProperty('--light-direction',side===1?'270deg':'90deg');
@@ -287,14 +284,20 @@
       }
       backdropFrame=requestAnimationFrame(tick);
     }
+    let motions = [];
     function openStep(index, animate = true, backdropDuration = animate ? 550 : 0) {
       if (index < 0 || index >= steps.length) return;
+      for (const motion of motions) motion.cancel();
+      motions = [];
+      const previous = step;
       step = index;
       moveBackdrop(index,backdropDuration);
       const track = document.querySelector('.step-track');
       track.style.setProperty('--step', step);
       track.querySelectorAll('circle').forEach((dot,i) => dot.classList.toggle('reached',i <= step));
+      strip.style.transform = translate(-100 * step);
       steps.forEach((page,i) => { page.inert = i !== step; });
+      if (animate && previous !== step) settleStrip(previous,step,550);
       document.querySelector('#aboutPrev').disabled = step === 0;
       document.querySelector('#aboutNext').disabled = step === steps.length - 1;
       document.querySelector('#aboutCount').textContent = (step + 1) + ' / ' + steps.length;
@@ -309,6 +312,7 @@
     document.querySelector('#aboutNext').onclick = () => advanceStep(1);
     const about = document.querySelector('#gioi-thieu');
     let swipe = null;
+    function translate(percent) { return 'translateX(' + percent + '%)'; }
     function followPointer(event) {
       if (event.pointerId !== swipe?.id) return;
       const dx = event.clientX - swipe.x, dy = event.clientY - swipe.y;
@@ -324,6 +328,7 @@
       const valid = next !== step && next >= 0 && next < steps.length;
       swipe.next = valid ? next : step;
       swipe.offset = valid ? fraction : fraction * .15;
+      strip.style.transform = translate((-step + swipe.offset) * 100);
       const progress = valid ? step - fraction : step;
       moveBackdrop(progress,0);
       document.querySelector('.step-track').style.setProperty('--step',progress);
@@ -338,8 +343,13 @@
       const origin = step;
       const target = allowChange && Math.abs(drag.offset) >= .18 ? drag.next : origin;
       openStep(target, false, 160 + Math.abs(origin - target + drag.offset)*190);
+      settleStrip(origin - drag.offset,target,160 + Math.abs(origin-target-drag.offset)*190);
     }
-
+    function settleStrip(from,to,duration){
+      if(from===to || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      motions.push(strip.animate([{transform:translate(-100*from)},{transform:translate(-100*to)}],
+        {duration,easing:'cubic-bezier(.22,.7,.24,1)'}));
+    }
     about.addEventListener('dragstart', event => {
       if (event.target.closest('.about-art img')) event.preventDefault();
     });
