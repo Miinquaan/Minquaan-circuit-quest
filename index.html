@@ -156,6 +156,14 @@
       .story-gallery .art-3>img,.story-gallery .art-3>.mission-crop{max-height:5svh}
       .story-text .page-copy{min-height:68svh}
     }
+      .story-text .page-copy{position:relative;padding-inline-start:clamp(16px,2vw,32px)}
+    .story-text .page-copy::before{content:"";position:absolute;left:0;top:32%;bottom:32%;width:3px;border-radius:8px;background:#ffdc5d;opacity:var(--emphasis,0);transform:scaleY(var(--emphasis,0))}
+    .story-text .page-copy>*{opacity:calc(.72 + .28 * var(--emphasis,1));transform:translateY(var(--copy-rise,0px))}
+    .story-gallery .art-1>:first-child,.story-gallery .art-2>:first-child{rotate:var(--fold,0deg);translate:var(--gather,0%) 0}
+    .story-gallery .art-1>:last-child,.story-gallery .art-2>:last-child{rotate:calc(-1 * var(--fold,0deg));translate:calc(-1 * var(--gather,0%)) 0}
+    .story-gallery .art-3>img:not(:first-child){translate:0 var(--piece-rise,0px)}
+    .story-gallery .art-3>.mission-crop{translate:0 calc(1.6 * var(--piece-rise,0px))}
+    @media(prefers-reduced-motion:reduce){.story-text .page-copy>*{opacity:1;transform:none}}
   </style>
 </head>
 <body>
@@ -273,13 +281,23 @@
       for(let i=1;i<centers.length;i++){
         position+=Math.max(0,Math.min(1,(line-centers[i-1])/(centers[i]-centers[i-1])));
       }
-      active=Math.round(position);
+      // Keep each scene steady while its paragraph is centered, then cross over.
+      const lower = Math.floor(position);
+      const blend = Math.max(0,Math.min(1,(position-lower-.18)/.64));
+      const scene = lower + blend*blend*(3-2*blend);
+      active = Math.round(scene);
       figures.forEach((fig,i)=>{
-        const distance=Math.min(1,Math.abs(position-i));
-        const t=reduced.matches ? Number(i!==active) : distance*distance*(3-2*distance);
-        fig.style.opacity=String(1-t);
-        fig.style.transform=reduced.matches?'none':'translateY('+((i<position?-1:1)*t*18)+'px) scale('+(1-.12*t)+')';
-        fig.style.clipPath='inset('+t*14+'% '+t*10+'% round '+t*35+'%)';
+        const offset = Math.max(-1,Math.min(1,i-scene));
+        const distance = Math.abs(offset);
+        const weight = reduced.matches ? Number(i===active) : 1-distance;
+        const motion = reduced.matches ? 0 : offset;
+        steps[i].style.setProperty('--emphasis',String(weight));
+        steps[i].style.setProperty('--copy-rise',motion*12+'px');
+        fig.style.opacity=String(weight);
+        fig.style.transform='translateY('+motion*34+'px) scale('+(1-.10*Math.abs(motion))+')';
+        fig.style.setProperty('--fold',Math.abs(motion)*17+'deg');
+        fig.style.setProperty('--gather',Math.abs(motion)*24+'%');
+        fig.style.setProperty('--piece-rise',motion*38+'px');
         fig.setAttribute('aria-hidden',String(i!==active));
       });
       about.querySelector('.step-track').style.setProperty('--step',position);
