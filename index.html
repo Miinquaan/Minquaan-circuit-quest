@@ -197,6 +197,20 @@
     #gioi-thieu .orbit-details article{cursor:auto;user-select:text}
     .orbit-controls{display:flex;align-items:center;justify-content:center;gap:18px;border-bottom:1px solid #46707e;padding-bottom:14px}.orbit-controls button{cursor:pointer;background:#123647;border:1px solid #61939e;border-radius:50%;width:44px;height:44px;color:white;font-size:21px}
     .observatory button:focus-visible{outline:3px solid #8bffdf;outline-offset:3px}
+    .kit-step>.kit-nav{box-sizing:border-box;width:52px;height:52px;display:grid;place-items:center;padding:0;border-radius:50%;font:600 27px/1 system-ui}
+    #kit-model{--w:min(54vw,360px);--d:calc(var(--w)*.18);perspective:1000px;touch-action:none;cursor:grab;background:radial-gradient(ellipse,#285466,#102941 70%)}
+    #kit-model:active{cursor:grabbing}#kit-model:focus-visible{outline:3px solid #89ffeb}
+    .kit-box{position:relative;width:var(--w);height:var(--d);transform-style:preserve-3d;transform:rotateX(-48deg) rotateY(-18deg)}
+    .kit-box i{position:absolute;inset:0;backface-visibility:hidden;background-color:#416a48;background-repeat:no-repeat}
+    .kit-box .box-lid,.kit-box .box-base{width:var(--w);height:var(--w);top:calc((var(--d) - var(--w))/2)}
+    .box-lid{background-image:url('assets/hop-3d.jpg');background-size:100% 133.3333%;transform:rotateX(90deg) translateZ(calc(var(--d)/2))}
+    .box-base{transform:rotateX(-90deg) translateZ(calc(var(--d)/2))}
+    .box-front,.box-right{background-image:url('assets/hop-3d.jpg');background-size:100% 800%}
+    .box-front{background-position:center 85.7143%;transform:translateZ(calc(var(--w)/2))}
+    .box-back{transform:rotateY(180deg) translateZ(calc(var(--w)/2))}
+    .box-right{background-position:center bottom;transform:rotateY(90deg) translateZ(calc(var(--w)/2))}
+    .box-left{transform:rotateY(-90deg) translateZ(calc(var(--w)/2))}
+    .orbit-object{transition:none!important}.orbit-object[aria-pressed="true"] span{color:#89ffeb;outline:1px solid currentColor}
   </style>
 </head>
 <body>
@@ -245,7 +259,7 @@
         <button type="button" class="orbit-object" data-slot="3" aria-pressed="false" aria-controls="orbit-copy-3"><img src="assets/cards/A14.png" alt=""><span>Học cùng nhau</span></button>
       </div>
       <div class="orbit-details">
-        <div class="orbit-controls"><button type="button" id="orbit-prev" aria-label="Chủ đề trước">←</button><span id="orbit-count" aria-live="polite">1 / 4 · Bộ trò chơi</span><button type="button" id="orbit-next" aria-label="Chủ đề sau">→</button></div>
+        <div class="orbit-controls"><button type="button" id="orbit-prev" aria-label="Chủ đề trước">←</button><span id="orbit-count" aria-live="polite">1 / 4 · Bộ trò chơi</span><button type="button" id="orbit-motion" aria-label="Tạm dừng quỹ đạo">Ⅱ</button><button type="button" id="orbit-next" aria-label="Chủ đề sau">→</button></div>
         <article id="orbit-copy-0"><h2>Học mạch điện qua từng nước đi</h2>
       <p>Circuit Quest là bộ trò chơi học tập kết hợp bàn chơi vật lý và công nghệ nhận diện thẻ linh kiện, giúp người học khám phá kiến thức mạch điện thông qua thao tác lắp ghép và giải quyết nhiệm vụ. Những kiến thức về nguồn điện, điện trở, đèn và dụng cụ đo được đưa vào trải nghiệm trực quan, nơi người chơi có thể tự mình lựa chọn, sắp xếp và tìm ra cách mắc mạch phù hợp.</p></article>
         <article id="orbit-copy-1" hidden><h2>Một bàn chơi, nhiều cách khám phá</h2>
@@ -269,20 +283,20 @@
     <h2 id="kit-title">Bộ bàn chơi thực tế</h2>
     <article class="kit-step">
         <h3>Mô hình hộp 3D</h3>
-        <div class="kit-media" id="kit-model"><img src="assets/ban-choi-nen.png" alt="Hộp bàn chơi Circuit Quest"></div>
-        <p id="kit-model-hint">Ảnh hộp bàn chơi. Mô hình 3D sẽ được cập nhật sau.</p>
-        <a class="kit-nav" href="#video-huong-dan">Tiếp theo → Video hướng dẫn</a>
+        <div class="kit-media" id="kit-model" tabindex="0" role="group" aria-label="Hộp Circuit Quest 3D" aria-describedby="kit-model-hint">
+          <div class="kit-box" aria-hidden="true"><i class="box-lid"></i><i class="box-base"></i><i class="box-front"></i><i class="box-back"></i><i class="box-left"></i><i class="box-right"></i></div>
+        </div>
+        <p id="kit-model-hint">Kéo để xoay hộp hoặc dùng các phím mũi tên. Các mặt khuất được mô phỏng.</p>
+        <a class="kit-nav" href="#video-huong-dan" aria-label="Xem video hướng dẫn">→</a>
     </article>
   </section>
   <section id="video-huong-dan" data-project-panel aria-labelledby="kit-video-title" hidden>
     <article class="kit-step">
         <h2 id="kit-video-title">Video hướng dẫn sử dụng Circuit Quest</h2>
         <div class="kit-media" id="kit-video"><p>Video sẽ được cập nhật sau.</p></div>
-        <a class="kit-nav" href="#bo-ban-choi">← Quay lại mô hình 3D</a>
+        <a class="kit-nav" href="#bo-ban-choi" aria-label="Quay lại mô hình 3D">←</a>
     </article>
     <script type="module">
-      // Điền đường dẫn đến tệp GLB và video MP4 khi có nội dung.
-      const modelUrl = '';
       const videoUrl = 'assets/huong-dan-circuit-quest.mp4';
       if (videoUrl) {
         const video = document.createElement('video');
@@ -293,28 +307,29 @@
         video.setAttribute('aria-label', 'Video chơi Circuit Quest thực tế');
         document.querySelector('#kit-video').replaceChildren(video);
       }
-      if (modelUrl) {
-        const frame = document.querySelector('#kit-model');
-        const hint = document.querySelector('#kit-model-hint');
-        const poster = frame.firstElementChild;
-        try {
-          await import('https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js');
-          const viewer = document.createElement('model-viewer');
-          viewer.setAttribute('camera-controls', '');
-          viewer.setAttribute('touch-action', 'pan-y');
-          viewer.alt = 'Mô hình hộp Circuit Quest';
-          viewer.poster = poster.src;
-          viewer.addEventListener('load', () => { hint.textContent = 'Kéo để xoay hộp và xem từ mọi góc.'; });
-          viewer.addEventListener('error', () => {
-            frame.replaceChildren(poster);
-            hint.textContent = 'Chưa tải được mô hình 3D.';
-          });
-          viewer.src = modelUrl;
-          frame.replaceChildren(viewer);
-        } catch {
-          hint.textContent = 'Chưa tải được trình xem 3D.';
-        }
+      const frame = document.getElementById('kit-model');
+      const box = frame.querySelector('.kit-box');
+      let pitch = -48, yaw = -18, drag = null;
+      function rotate(dx, dy) {
+        yaw = (yaw + dx) % 360;
+        pitch = (pitch - dy) % 360;
+        box.style.transform = 'rotateX(' + pitch + 'deg) rotateY(' + yaw + 'deg)';
       }
+      frame.onpointerdown = e => {
+        if (drag || e.button !== 0) return;
+        drag = {id:e.pointerId, x:e.clientX, y:e.clientY};
+        frame.setPointerCapture(e.pointerId);
+      };
+      frame.onpointermove = e => {
+        if (drag?.id !== e.pointerId) return;
+        rotate((e.clientX-drag.x)*.55, (e.clientY-drag.y)*.55);
+        drag.x=e.clientX; drag.y=e.clientY;
+      };
+      frame.onlostpointercapture = () => { drag=null; };
+      frame.onkeydown = e => {
+        const delta = {ArrowRight:[12,0],ArrowLeft:[-12,0],ArrowUp:[0,-12],ArrowDown:[0,12]}[e.key];
+        if (delta) { e.preventDefault(); rotate(...delta); }
+      };
     </script>
   </section>
   </main>
@@ -355,11 +370,39 @@
     });
     const orbitButtons = Array.from(document.querySelectorAll('.orbit-object'));
     let selectedTopic = 0;
+    const motionButton = document.getElementById('orbit-motion');
+    const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+    let paused = motionPreference.matches, phase = 0, last = 0, orbitFrame = 0;
+    const intro = document.getElementById('gioi-thieu');
+    function drawOrbit() {
+      orbitButtons.forEach((button, i) => {
+        const angle = phase + i * Math.PI / 2;
+        const depth = (Math.cos(angle) + 1) / 2;
+        button.style.left = (50 + 35 * Math.sin(angle)) + '%';
+        button.style.top = (46.5 + 27.5 * Math.cos(angle)) + '%';
+        button.style.setProperty('--scale', .66 + .47 * depth);
+        button.style.zIndex = String(1 + Math.round(depth * 10));
+      });
+    }
+    function tick(time) {
+      if (last) phase += Math.min(time-last, 100) * Math.PI / 42000;
+      last=time; drawOrbit(); orbitFrame=requestAnimationFrame(tick);
+    }
+    function syncMotion() {
+      cancelAnimationFrame(orbitFrame); last=0;
+      motionButton.textContent = paused ? '▶' : 'Ⅱ';
+      motionButton.setAttribute('aria-label', paused ? 'Tiếp tục chuyển động quỹ đạo' : 'Tạm dừng quỹ đạo');
+      if (!paused && !intro.hidden && !document.hidden) orbitFrame=requestAnimationFrame(tick);
+    }
+    motionButton.onclick=()=>{ paused=!paused; syncMotion(); };
+    motionPreference.addEventListener('change',()=>{paused=motionPreference.matches;syncMotion();});
+    document.addEventListener('visibilitychange',syncMotion);
     function selectTopic(index) {
+      paused=true; syncMotion();
       selectedTopic = (index + orbitButtons.length) % orbitButtons.length;
       orbitButtons.forEach((button, i) => {
         const selected = i === selectedTopic;
-        button.dataset.slot = (i - selectedTopic + orbitButtons.length) % orbitButtons.length;
+
         button.setAttribute('aria-pressed', String(selected));
         document.getElementById(button.getAttribute('aria-controls')).hidden = !selected;
       });
@@ -377,6 +420,7 @@
       current.classList.toggle('kit-enter', Boolean(previousPanel?.matches(kitSelector) && current.matches(kitSelector)));
       previousPanel = current;
       for (const panel of panels) panel.hidden = panel !== current;
+      syncMotion();
       for (const link of links) {
         if (link.hash === '#' + (current.id === 'video-huong-dan' ? 'bo-ban-choi' : current.id)) link.setAttribute('aria-current', 'page');
         else link.removeAttribute('aria-current');
