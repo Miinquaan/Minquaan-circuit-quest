@@ -183,8 +183,8 @@
     .observatory{max-width:1000px;margin:auto;padding:clamp(24px,4vw,54px) 16px 64px;text-align:center}
     #gioi-thieu .observatory h1{color:white;font-size:clamp(36px,6vw,72px);margin:0;letter-spacing:-.045em}
     .observatory header p{color:#b7cddd}
-    .orbit-stage{position:relative;height:clamp(260px,36vw,375px);max-width:760px;margin:auto;touch-action:pan-y}
-    .orbit-ring{position:absolute;inset:18% 10% 20%;border:1px solid #73c5ce80;border-radius:50%;box-shadow:0 0 28px #68e9df18,inset 0 0 28px #68e9df12}
+    .orbit-stage{position:relative;height:clamp(260px,36vw,375px);max-width:1000px;margin:auto;touch-action:pan-y}
+    .orbit-ring{position:absolute;inset:26% 22% 26%;border:1px solid #73c5ce80;border-radius:50%;box-shadow:0 0 28px #68e9df18,inset 0 0 28px #68e9df12}
     .orbit-object{position:absolute;width:clamp(90px,19vw,178px);padding:6px;border:0;border-radius:12px;background:transparent;color:#d8ecf4;cursor:pointer;transform:translate(-50%,-50%) scale(var(--scale));display:grid;justify-items:center;gap:4px}
     .orbit-object img{width:100%;height:clamp(76px,13vw,132px);object-fit:contain;filter:drop-shadow(0 6px 10px #02091799);pointer-events:none}
     .orbit-object span{font-weight:700;background:#0a2133;padding:3px 8px;border-radius:6px}
@@ -408,9 +408,9 @@
         const angle = phase + offset;
         const x = Math.sin(angle), z = Math.cos(angle);
         const depth = (z+1)/2;
-        const radius = ring ? 29 : 43;
+        const radius = ring ? 43 : 46;
         image.style.left = (50 + radius*x) + '%';
-        image.style.top = (46.5 + (ring ? 17 : 37)*z + (ring ? 12 : -7)*x) + '%';
+        image.style.top = (50 + (ring ? 40 : 44)*z + (ring ? 3 : -3)*x) + '%';
         const scale = .54 + .52*depth;
         image.style.transform = 'translate(-50%,-50%) scale('+scale+') rotate('+(x*12)+'deg)';
         image.style.opacity = String(.67 + .33*depth);
@@ -419,8 +419,8 @@
       orbitButtons.forEach((button, i) => {
         const angle = phase + i * Math.PI / 2;
         const depth = (Math.cos(angle) + 1) / 2;
-        button.style.left = (50 + 35 * Math.sin(angle)) + '%';
-        button.style.top = (46.5 + 27.5 * Math.cos(angle)) + '%';
+        button.style.left = (50 + 28 * Math.sin(angle)) + '%';
+        button.style.top = (50 + 24 * Math.cos(angle)) + '%';
         button.style.setProperty('--scale', .66 + .47 * depth);
         button.style.zIndex = String(2 + Math.round(depth * 8)*2);
       });
