@@ -218,6 +218,18 @@
     #orbit-reader::backdrop{background:rgb(3 12 24 / .79)}
     .reader-image{display:block;width:100%;height:clamp(145px,32vh,320px);object-fit:contain;pointer-events:none}
     .reader-close{position:sticky;top:0;float:right;margin:0 0 -44px;width:44px;height:44px;border-radius:50%;border:1px solid #79a9b5;background:#143448;color:white;font-size:26px;cursor:pointer;z-index:1}
+    #gioi-thieu{position:relative;isolation:isolate}
+    .floating-parts{position:absolute;inset:0;overflow:hidden;pointer-events:none;user-select:none;z-index:0}
+    .floating-parts img{position:absolute;left:var(--x);top:var(--y);width:clamp(30px,4.6vw,76px);height:auto;opacity:.48;transform:translate(-50%,-50%) rotate(var(--tilt))}
+    .observatory{position:relative;z-index:1}
+    @media(prefers-reduced-motion:no-preference){
+      .floating-parts img{animation:part-drift var(--duration) ease-in-out var(--delay) infinite alternate}
+      @keyframes part-drift{
+        from{transform:translate(-50%,-50%) translate(calc(-11px * var(--drift)),10px) rotate(var(--tilt))}
+        to{transform:translate(-50%,-50%) translate(calc(16px * var(--drift)),-17px) rotate(calc(var(--tilt) + 12deg))}
+      }
+    }
+    @media(max-width:700px){.floating-parts img{width:30px;opacity:.34}.floating-parts img:nth-child(3n + 2){display:none}}
   </style>
 </head>
 <body>
@@ -256,6 +268,21 @@
     <div class="cover-cards" aria-hidden="true"><img src="assets/cards/A01.png" alt=""><img src="assets/cards/A08.png" alt=""><img src="assets/cards/A14.png" alt=""></div>
   </section>
   <section id="gioi-thieu" data-project-panel aria-labelledby="orbit-title">
+    <div class="floating-parts" aria-hidden="true">
+      <img src="assets/cards/A02.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:7%;--y:17%;--tilt:-14deg;--drift:-1;--duration:14s;--delay:-0s">
+      <img src="assets/cards/A04.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:23%;--y:6%;--tilt:-7deg;--drift:1;--duration:15s;--delay:-3s">
+      <img src="assets/cards/A01.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:78%;--y:8%;--tilt:0deg;--drift:-1;--duration:16s;--delay:-6s">
+      <img src="assets/cards/A03.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:93%;--y:21%;--tilt:7deg;--drift:1;--duration:17s;--delay:-9s">
+      <img src="assets/cards/A05.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:4%;--y:44%;--tilt:14deg;--drift:-1;--duration:18s;--delay:-12s">
+      <img src="assets/cards/A06.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:13%;--y:65%;--tilt:-8deg;--drift:1;--duration:19s;--delay:-15s">
+      <img src="assets/cards/A07.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:93%;--y:51%;--tilt:-1deg;--drift:-1;--duration:14s;--delay:-18s">
+      <img src="assets/cards/A09.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:86%;--y:73%;--tilt:6deg;--drift:1;--duration:15s;--delay:-21s">
+      <img src="assets/cards/A10.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:5%;--y:86%;--tilt:13deg;--drift:-1;--duration:16s;--delay:-24s">
+      <img src="assets/cards/A11.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:25%;--y:90%;--tilt:-9deg;--drift:1;--duration:17s;--delay:-27s">
+      <img src="assets/cards/A12.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:44%;--y:94%;--tilt:-2deg;--drift:-1;--duration:18s;--delay:-30s">
+      <img src="assets/cards/A13.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:60%;--y:89%;--tilt:5deg;--drift:1;--duration:19s;--delay:-33s">
+      <img src="assets/cards/A15.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:95%;--y:92%;--tilt:12deg;--drift:-1;--duration:14s;--delay:-36s">
+    </div>
     <div class="observatory">
       <header><h1 id="orbit-title">Circuit Quest</h1><p>Kéo để xoay quỹ đạo. Chọn một hình để xem gần và đọc giới thiệu.</p></header>
       <div class="orbit-stage" role="group" aria-label="Chủ đề giới thiệu">
