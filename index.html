@@ -219,7 +219,13 @@
     .reader-image{display:block;width:100%;height:clamp(145px,32vh,320px);object-fit:contain;pointer-events:none}
     .reader-close{position:sticky;top:0;float:right;margin:0 0 -44px;width:44px;height:44px;border-radius:50%;border:1px solid #79a9b5;background:#143448;color:white;font-size:26px;cursor:pointer;z-index:1}
     #gioi-thieu{position:relative;isolation:isolate}
-    .orbit-part{position:absolute;left:50%;top:50%;width:clamp(32px,6.4vw,75px);height:clamp(35px,7vw,84px);object-fit:contain;pointer-events:none;user-select:none;filter:drop-shadow(0 3px 5px #02101b70)}
+    .parts-field{position:absolute;inset:0;overflow:hidden;pointer-events:none;user-select:none}
+    .observatory{position:relative;z-index:1}
+    .orbit-part{position:absolute;left:var(--x);top:var(--y);width:clamp(28px,4.5vw,68px);height:auto;opacity:.68;transform:translate(-50%,-50%) rotate(var(--tilt));filter:drop-shadow(0 3px 5px #02101b70)}
+    @media(prefers-reduced-motion:no-preference){
+      .orbit-part{animation:parts-float var(--period) ease-in-out var(--delay) infinite alternate}
+      @keyframes parts-float{to{transform:translate(-50%,-50%) translate(var(--dx),var(--dy)) rotate(calc(var(--tilt) + 10deg))}}
+    }
     .orbit-object{isolation:isolate}
     </style>
 </head>
@@ -259,23 +265,25 @@
     <div class="cover-cards" aria-hidden="true"><img src="assets/cards/A01.png" alt=""><img src="assets/cards/A08.png" alt=""><img src="assets/cards/A14.png" alt=""></div>
   </section>
   <section id="gioi-thieu" data-project-panel aria-labelledby="orbit-title">
+    <div class="parts-field" aria-hidden="true">
+      <img class="orbit-part" src="assets/cards/A02.png" style="--x:6%;--y:17%;--dx:-13px;--dy:14px;--tilt:-15deg;--period:9s;--delay:-0s" alt="" draggable="false" decoding="async">
+      <img class="orbit-part" src="assets/cards/A04.png" style="--x:24%;--y:8%;--dx:10px;--dy:-12px;--tilt:-6deg;--period:10s;--delay:-3s" alt="" draggable="false" decoding="async">
+      <img class="orbit-part" src="assets/cards/A01.png" style="--x:76%;--y:7%;--dx:-13px;--dy:-12px;--tilt:3deg;--period:11s;--delay:-6s" alt="" draggable="false" decoding="async">
+      <img class="orbit-part" src="assets/cards/A03.png" style="--x:92%;--y:18%;--dx:10px;--dy:14px;--tilt:12deg;--period:12s;--delay:-9s" alt="" draggable="false" decoding="async">
+      <img class="orbit-part" src="assets/cards/A05.png" style="--x:12%;--y:39%;--dx:-13px;--dy:-12px;--tilt:-10deg;--period:13s;--delay:-12s" alt="" draggable="false" decoding="async">
+      <img class="orbit-part" src="assets/cards/A06.png" style="--x:5%;--y:61%;--dx:10px;--dy:-12px;--tilt:-1deg;--period:14s;--delay:-15s" alt="" draggable="false" decoding="async">
+      <img class="orbit-part" src="assets/cards/A07.png" style="--x:88%;--y:37%;--dx:-13px;--dy:14px;--tilt:8deg;--period:15s;--delay:-18s" alt="" draggable="false" decoding="async">
+      <img class="orbit-part" src="assets/cards/A09.png" style="--x:95%;--y:57%;--dx:10px;--dy:-12px;--tilt:-14deg;--period:9s;--delay:-21s" alt="" draggable="false" decoding="async">
+      <img class="orbit-part" src="assets/cards/A10.png" style="--x:17%;--y:78%;--dx:-13px;--dy:-12px;--tilt:-5deg;--period:10s;--delay:-24s" alt="" draggable="false" decoding="async">
+      <img class="orbit-part" src="assets/cards/A11.png" style="--x:8%;--y:92%;--dx:10px;--dy:14px;--tilt:4deg;--period:11s;--delay:-27s" alt="" draggable="false" decoding="async">
+      <img class="orbit-part" src="assets/cards/A12.png" style="--x:36%;--y:89%;--dx:-13px;--dy:-12px;--tilt:13deg;--period:12s;--delay:-30s" alt="" draggable="false" decoding="async">
+      <img class="orbit-part" src="assets/cards/A13.png" style="--x:65%;--y:91%;--dx:10px;--dy:-12px;--tilt:-9deg;--period:13s;--delay:-33s" alt="" draggable="false" decoding="async">
+      <img class="orbit-part" src="assets/cards/A15.png" style="--x:86%;--y:82%;--dx:-13px;--dy:14px;--tilt:0deg;--period:14s;--delay:-36s" alt="" draggable="false" decoding="async">
+    </div>
     <div class="observatory">
       <header><h1 id="orbit-title">Circuit Quest</h1><p>Kéo để xoay quỹ đạo. Chọn một hình để xem gần và đọc giới thiệu.</p></header>
       <div class="orbit-stage" role="group" aria-label="Chủ đề giới thiệu">
         <div class="orbit-ring" aria-hidden="true"></div>
-        <img class="orbit-part" src="assets/cards/A02.png" aria-hidden="true" alt="" draggable="false" decoding="async">
-        <img class="orbit-part" src="assets/cards/A04.png" aria-hidden="true" alt="" draggable="false" decoding="async">
-        <img class="orbit-part" src="assets/cards/A01.png" aria-hidden="true" alt="" draggable="false" decoding="async">
-        <img class="orbit-part" src="assets/cards/A03.png" aria-hidden="true" alt="" draggable="false" decoding="async">
-        <img class="orbit-part" src="assets/cards/A05.png" aria-hidden="true" alt="" draggable="false" decoding="async">
-        <img class="orbit-part" src="assets/cards/A06.png" aria-hidden="true" alt="" draggable="false" decoding="async">
-        <img class="orbit-part" src="assets/cards/A07.png" aria-hidden="true" alt="" draggable="false" decoding="async">
-        <img class="orbit-part" src="assets/cards/A09.png" aria-hidden="true" alt="" draggable="false" decoding="async">
-        <img class="orbit-part" src="assets/cards/A10.png" aria-hidden="true" alt="" draggable="false" decoding="async">
-        <img class="orbit-part" src="assets/cards/A11.png" aria-hidden="true" alt="" draggable="false" decoding="async">
-        <img class="orbit-part" src="assets/cards/A12.png" aria-hidden="true" alt="" draggable="false" decoding="async">
-        <img class="orbit-part" src="assets/cards/A13.png" aria-hidden="true" alt="" draggable="false" decoding="async">
-        <img class="orbit-part" src="assets/cards/A15.png" aria-hidden="true" alt="" draggable="false" decoding="async">
         <button type="button" class="orbit-object" data-slot="0" aria-label="Bộ trò chơi" aria-haspopup="dialog" aria-controls="orbit-reader"><img src="assets/ban-choi-trong-suot.png" alt=""><span>Bộ trò chơi</span></button>
         <button type="button" class="orbit-object" data-slot="1" aria-label="Linh kiện" aria-haspopup="dialog" aria-controls="orbit-reader"><img src="assets/cards/A08.png" alt=""><span>Linh kiện</span></button>
         <button type="button" class="orbit-object" data-slot="2" aria-label="Nhiệm vụ" aria-haspopup="dialog" aria-controls="orbit-reader"><img src="assets/missions/easy.png" alt=""><span>Nhiệm vụ</span></button>
@@ -397,25 +405,7 @@
     const picture = reader.querySelector('.reader-image');
     const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
     let phase=0, last=0, orbitFrame=0, gesture=null, ignoreClick=false;
-    const orbitParts = Array.from(stage.querySelectorAll('.orbit-part'), (image, i) => {
-      // Stagger the cards between the four topics on two tilted rings.
-      const ring = i % 2;
-      const count = ring ? 6 : 7;
-      return {image, ring, offset:2*Math.PI*(Math.floor(i/2)+.45+ring*.24)/count};
-    });
     function drawOrbit() {
-      for (const {image, ring, offset} of orbitParts) {
-        const angle = phase + offset;
-        const x = Math.sin(angle), z = Math.cos(angle);
-        const depth = (z+1)/2;
-        const radius = ring ? 43 : 46;
-        image.style.left = (50 + radius*x) + '%';
-        image.style.top = (50 + (ring ? 40 : 44)*z + (ring ? 3 : -3)*x) + '%';
-        const scale = .54 + .52*depth;
-        image.style.transform = 'translate(-50%,-50%) scale('+scale+') rotate('+(x*12)+'deg)';
-        image.style.opacity = String(.67 + .33*depth);
-        image.style.zIndex = String(1 + Math.round(depth*8)*2);
-      }
       orbitButtons.forEach((button, i) => {
         const angle = phase + i * Math.PI / 2;
         const depth = (Math.cos(angle) + 1) / 2;
