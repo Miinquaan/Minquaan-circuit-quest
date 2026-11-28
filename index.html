@@ -24,10 +24,21 @@
     @media(prefers-reduced-motion:no-preference){
       .nav-item a{transition:transform .15s ease-out,box-shadow .15s,background .15s}
     }
-    #bo-ban-choi,#video-huong-dan{max-width:1100px;margin:auto;padding:clamp(16px,4vw,48px)}
+    body:has(:is(#bo-ban-choi,#video-huong-dan):not([hidden])){background:#071528}
+    #bo-ban-choi,#video-huong-dan{box-sizing:border-box;min-height:100svh;padding:clamp(20px,4vw,48px);color:#eef8ff;background:radial-gradient(ellipse at 50% 34%,#14495a 0%,#0b253c 40%,#071528 76%)}
+    #kit-title{max-width:800px;margin-inline:auto}
+    .kit-step>.kit-nav{display:table;margin-left:auto;background:#c4ddff;color:#102951}
+    @media(min-width:1120px){.kit-step>.kit-nav{position:fixed;right:clamp(16px,2vw,36px);top:50%;max-width:135px;text-align:center;z-index:5}}
+    .kit-nav:focus-visible{outline:3px solid #89ffeb;outline-offset:4px}
+    @media(prefers-reduced-motion:no-preference){
+      .kit-enter .kit-media,.kit-enter .kit-step h3,.kit-enter .kit-step h2,.kit-enter #kit-model-hint{animation:kit-slide .36s ease-out both}
+      #bo-ban-choi{--kit-offset:-28px}
+      #video-huong-dan{--kit-offset:28px}
+      @keyframes kit-slide{from{opacity:0;translate:var(--kit-offset) 0}to{opacity:1;translate:0 0}}
+    }
     .kit-step{max-width:800px;margin-inline:auto}
     .kit-nav{display:inline-block;margin-top:16px;padding:10px 18px;border-radius:8px;background:#173b8f;color:white;text-decoration:none;font-weight:600}
-    .kit-media{display:grid;place-items:center;aspect-ratio:4/3;background:#edf3fb;color:#203556;border-radius:16px;overflow:hidden;text-align:center}
+    .kit-media{display:grid;place-items:center;aspect-ratio:4/3;background:#102941;color:#eef8ff;border-radius:16px;overflow:hidden;text-align:center}
     .kit-media img,.kit-media video,.kit-media model-viewer{display:block;width:100%;height:100%;object-fit:contain}
     [data-project-panel]{scroll-margin-top:90px}
     #luat-choi{max-width:1100px;margin:0 auto;padding:clamp(16px,4vw,48px)}
@@ -357,10 +368,14 @@
     orbitButtons.forEach((button, index) => button.onclick = () => selectTopic(index));
     document.getElementById('orbit-prev').onclick = () => selectTopic(selectedTopic - 1);
     document.getElementById('orbit-next').onclick = () => selectTopic(selectedTopic + 1);
+    let previousPanel;
     function showSection() {
 
       setPreview(null);
       const current = panels.find(panel => '#' + panel.id === location.hash) || panels[0];
+      const kitSelector = '#bo-ban-choi,#video-huong-dan';
+      current.classList.toggle('kit-enter', Boolean(previousPanel?.matches(kitSelector) && current.matches(kitSelector)));
+      previousPanel = current;
       for (const panel of panels) panel.hidden = panel !== current;
       for (const link of links) {
         if (link.hash === '#' + (current.id === 'video-huong-dan' ? 'bo-ban-choi' : current.id)) link.setAttribute('aria-current', 'page');
