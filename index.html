@@ -219,18 +219,9 @@
     .reader-image{display:block;width:100%;height:clamp(145px,32vh,320px);object-fit:contain;pointer-events:none}
     .reader-close{position:sticky;top:0;float:right;margin:0 0 -44px;width:44px;height:44px;border-radius:50%;border:1px solid #79a9b5;background:#143448;color:white;font-size:26px;cursor:pointer;z-index:1}
     #gioi-thieu{position:relative;isolation:isolate}
-    .floating-parts{position:absolute;inset:0;overflow:hidden;pointer-events:none;user-select:none;z-index:0}
-    .floating-parts img{position:absolute;left:var(--x);top:var(--y);width:clamp(30px,4.6vw,76px);height:auto;opacity:.48;transform:translate(-50%,-50%) rotate(var(--tilt))}
-    .observatory{position:relative;z-index:1}
-    @media(prefers-reduced-motion:no-preference){
-      .floating-parts img{animation:part-drift var(--duration) ease-in-out var(--delay) infinite alternate}
-      @keyframes part-drift{
-        from{transform:translate(-50%,-50%) translate(calc(-11px * var(--drift)),10px) rotate(var(--tilt))}
-        to{transform:translate(-50%,-50%) translate(calc(16px * var(--drift)),-17px) rotate(calc(var(--tilt) + 12deg))}
-      }
-    }
-    @media(max-width:700px){.floating-parts img{width:30px;opacity:.34}.floating-parts img:nth-child(3n + 2){display:none}}
-  </style>
+    .orbit-part{position:absolute;left:50%;top:50%;width:clamp(32px,6.4vw,75px);height:clamp(35px,7vw,84px);object-fit:contain;pointer-events:none;user-select:none;filter:drop-shadow(0 3px 5px #02101b70)}
+    .orbit-object{isolation:isolate}
+    </style>
 </head>
 <body>
   <nav class="project-nav" aria-label="Thông tin dự án">
@@ -268,25 +259,23 @@
     <div class="cover-cards" aria-hidden="true"><img src="assets/cards/A01.png" alt=""><img src="assets/cards/A08.png" alt=""><img src="assets/cards/A14.png" alt=""></div>
   </section>
   <section id="gioi-thieu" data-project-panel aria-labelledby="orbit-title">
-    <div class="floating-parts" aria-hidden="true">
-      <img src="assets/cards/A02.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:7%;--y:17%;--tilt:-14deg;--drift:-1;--duration:14s;--delay:-0s">
-      <img src="assets/cards/A04.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:23%;--y:6%;--tilt:-7deg;--drift:1;--duration:15s;--delay:-3s">
-      <img src="assets/cards/A01.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:78%;--y:8%;--tilt:0deg;--drift:-1;--duration:16s;--delay:-6s">
-      <img src="assets/cards/A03.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:93%;--y:21%;--tilt:7deg;--drift:1;--duration:17s;--delay:-9s">
-      <img src="assets/cards/A05.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:4%;--y:44%;--tilt:14deg;--drift:-1;--duration:18s;--delay:-12s">
-      <img src="assets/cards/A06.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:13%;--y:65%;--tilt:-8deg;--drift:1;--duration:19s;--delay:-15s">
-      <img src="assets/cards/A07.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:93%;--y:51%;--tilt:-1deg;--drift:-1;--duration:14s;--delay:-18s">
-      <img src="assets/cards/A09.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:86%;--y:73%;--tilt:6deg;--drift:1;--duration:15s;--delay:-21s">
-      <img src="assets/cards/A10.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:5%;--y:86%;--tilt:13deg;--drift:-1;--duration:16s;--delay:-24s">
-      <img src="assets/cards/A11.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:25%;--y:90%;--tilt:-9deg;--drift:1;--duration:17s;--delay:-27s">
-      <img src="assets/cards/A12.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:44%;--y:94%;--tilt:-2deg;--drift:-1;--duration:18s;--delay:-30s">
-      <img src="assets/cards/A13.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:60%;--y:89%;--tilt:5deg;--drift:1;--duration:19s;--delay:-33s">
-      <img src="assets/cards/A15.png" alt="" draggable="false" loading="lazy" decoding="async" style="--x:95%;--y:92%;--tilt:12deg;--drift:-1;--duration:14s;--delay:-36s">
-    </div>
     <div class="observatory">
       <header><h1 id="orbit-title">Circuit Quest</h1><p>Kéo để xoay quỹ đạo. Chọn một hình để xem gần và đọc giới thiệu.</p></header>
       <div class="orbit-stage" role="group" aria-label="Chủ đề giới thiệu">
         <div class="orbit-ring" aria-hidden="true"></div>
+        <img class="orbit-part" src="assets/cards/A02.png" aria-hidden="true" alt="" draggable="false" decoding="async">
+        <img class="orbit-part" src="assets/cards/A04.png" aria-hidden="true" alt="" draggable="false" decoding="async">
+        <img class="orbit-part" src="assets/cards/A01.png" aria-hidden="true" alt="" draggable="false" decoding="async">
+        <img class="orbit-part" src="assets/cards/A03.png" aria-hidden="true" alt="" draggable="false" decoding="async">
+        <img class="orbit-part" src="assets/cards/A05.png" aria-hidden="true" alt="" draggable="false" decoding="async">
+        <img class="orbit-part" src="assets/cards/A06.png" aria-hidden="true" alt="" draggable="false" decoding="async">
+        <img class="orbit-part" src="assets/cards/A07.png" aria-hidden="true" alt="" draggable="false" decoding="async">
+        <img class="orbit-part" src="assets/cards/A09.png" aria-hidden="true" alt="" draggable="false" decoding="async">
+        <img class="orbit-part" src="assets/cards/A10.png" aria-hidden="true" alt="" draggable="false" decoding="async">
+        <img class="orbit-part" src="assets/cards/A11.png" aria-hidden="true" alt="" draggable="false" decoding="async">
+        <img class="orbit-part" src="assets/cards/A12.png" aria-hidden="true" alt="" draggable="false" decoding="async">
+        <img class="orbit-part" src="assets/cards/A13.png" aria-hidden="true" alt="" draggable="false" decoding="async">
+        <img class="orbit-part" src="assets/cards/A15.png" aria-hidden="true" alt="" draggable="false" decoding="async">
         <button type="button" class="orbit-object" data-slot="0" aria-label="Bộ trò chơi" aria-haspopup="dialog" aria-controls="orbit-reader"><img src="assets/ban-choi-trong-suot.png" alt=""><span>Bộ trò chơi</span></button>
         <button type="button" class="orbit-object" data-slot="1" aria-label="Linh kiện" aria-haspopup="dialog" aria-controls="orbit-reader"><img src="assets/cards/A08.png" alt=""><span>Linh kiện</span></button>
         <button type="button" class="orbit-object" data-slot="2" aria-label="Nhiệm vụ" aria-haspopup="dialog" aria-controls="orbit-reader"><img src="assets/missions/easy.png" alt=""><span>Nhiệm vụ</span></button>
@@ -408,14 +397,32 @@
     const picture = reader.querySelector('.reader-image');
     const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
     let phase=0, last=0, orbitFrame=0, gesture=null, ignoreClick=false;
+    const orbitParts = Array.from(stage.querySelectorAll('.orbit-part'), (image, i) => {
+      // Stagger the cards between the four topics on two tilted rings.
+      const ring = i % 2;
+      const count = ring ? 6 : 7;
+      return {image, ring, offset:2*Math.PI*(Math.floor(i/2)+.45+ring*.24)/count};
+    });
     function drawOrbit() {
+      for (const {image, ring, offset} of orbitParts) {
+        const angle = phase + offset;
+        const x = Math.sin(angle), z = Math.cos(angle);
+        const depth = (z+1)/2;
+        const radius = ring ? 29 : 43;
+        image.style.left = (50 + radius*x) + '%';
+        image.style.top = (46.5 + (ring ? 17 : 37)*z + (ring ? 12 : -7)*x) + '%';
+        const scale = .54 + .52*depth;
+        image.style.transform = 'translate(-50%,-50%) scale('+scale+') rotate('+(x*12)+'deg)';
+        image.style.opacity = String(.67 + .33*depth);
+        image.style.zIndex = String(1 + Math.round(depth*8)*2);
+      }
       orbitButtons.forEach((button, i) => {
         const angle = phase + i * Math.PI / 2;
         const depth = (Math.cos(angle) + 1) / 2;
         button.style.left = (50 + 35 * Math.sin(angle)) + '%';
         button.style.top = (46.5 + 27.5 * Math.cos(angle)) + '%';
         button.style.setProperty('--scale', .66 + .47 * depth);
-        button.style.zIndex = String(1 + Math.round(depth * 10));
+        button.style.zIndex = String(2 + Math.round(depth * 8)*2);
       });
     }
     function tick(time) {
