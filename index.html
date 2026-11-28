@@ -25,6 +25,10 @@
       .nav-item a{transition:transform .15s ease-out,box-shadow .15s,background .15s}
     }
     #bo-ban-choi{max-width:1100px;margin:auto;padding:clamp(16px,4vw,48px)}
+    .kit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px}
+    .kit-grid article{min-width:0}
+    .kit-media{display:grid;place-items:center;aspect-ratio:4/3;background:#edf3fb;color:#203556;border-radius:16px;overflow:hidden;text-align:center}
+    .kit-media img,.kit-media video,.kit-media model-viewer{display:block;width:100%;height:100%;object-fit:contain}
     [data-project-panel]{scroll-margin-top:90px}
     #luat-choi{max-width:1100px;margin:0 auto;padding:clamp(16px,4vw,48px)}
     #rules-title{color:#173b8f}
@@ -189,7 +193,7 @@
     <div class="nav-item">
       <a href="#bo-ban-choi" aria-describedby="preview-bo-ban-choi">Bộ bàn chơi thực tế</a>
       <div id="preview-bo-ban-choi" class="nav-preview" role="tooltip" hidden>
-        <div class="preview-body">Chưa có thông tin.</div>
+        <div class="preview-body">Mô hình hộp 3D và video chơi thực tế.</div>
       </div>
     </div>
   </nav>
@@ -224,7 +228,53 @@
   </section>
   <section id="bo-ban-choi" data-project-panel aria-labelledby="kit-title">
     <h2 id="kit-title">Bộ bàn chơi thực tế</h2>
-    <p>Chưa có thông tin.</p>
+    <div class="kit-grid">
+      <article>
+        <h3>Mô hình hộp 3D</h3>
+        <div class="kit-media" id="kit-model"><img src="assets/ban-choi-nen.png" alt="Hộp bàn chơi Circuit Quest"></div>
+        <p id="kit-model-hint">Ảnh hộp bàn chơi. Mô hình 3D sẽ được cập nhật sau.</p>
+      </article>
+      <article>
+        <h3>Video chơi thực tế</h3>
+        <div class="kit-media" id="kit-video"><p>Video sẽ được cập nhật sau.</p></div>
+      </article>
+    </div>
+    <script type="module">
+      // Điền đường dẫn đến tệp GLB và video MP4 khi có nội dung.
+      const modelUrl = '';
+      const videoUrl = '';
+      if (videoUrl) {
+        const video = document.createElement('video');
+        video.controls = true;
+        video.playsInline = true;
+        video.preload = 'metadata';
+        video.src = videoUrl;
+        video.setAttribute('aria-label', 'Video chơi Circuit Quest thực tế');
+        document.querySelector('#kit-video').replaceChildren(video);
+      }
+      if (modelUrl) {
+        const frame = document.querySelector('#kit-model');
+        const hint = document.querySelector('#kit-model-hint');
+        const poster = frame.firstElementChild;
+        try {
+          await import('https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js');
+          const viewer = document.createElement('model-viewer');
+          viewer.setAttribute('camera-controls', '');
+          viewer.setAttribute('touch-action', 'pan-y');
+          viewer.alt = 'Mô hình hộp Circuit Quest';
+          viewer.poster = poster.src;
+          viewer.addEventListener('load', () => { hint.textContent = 'Kéo để xoay hộp và xem từ mọi góc.'; });
+          viewer.addEventListener('error', () => {
+            frame.replaceChildren(poster);
+            hint.textContent = 'Chưa tải được mô hình 3D.';
+          });
+          viewer.src = modelUrl;
+          frame.replaceChildren(viewer);
+        } catch {
+          hint.textContent = 'Chưa tải được trình xem 3D.';
+        }
+      }
+    </script>
   </section>
   </main>
   <script>
