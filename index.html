@@ -221,7 +221,7 @@
     #gioi-thieu{position:relative;isolation:isolate}
     .parts-field{position:absolute;inset:0;overflow:hidden;pointer-events:none;user-select:none}
     .observatory{position:relative;z-index:1}
-    .orbit-part{position:absolute;left:var(--x);top:var(--y);width:clamp(28px,4.5vw,68px);height:auto;opacity:.68;transform:translate(-50%,-50%) rotate(var(--tilt));filter:drop-shadow(0 3px 5px #02101b70)}
+    .orbit-part{position:absolute;left:var(--x);top:var(--y);width:clamp(44px,7vw,104px);height:auto;opacity:1;transform:translate(-50%,-50%) rotate(var(--tilt));filter:drop-shadow(0 3px 5px #02101b70)}
     @media(prefers-reduced-motion:no-preference){
       .orbit-part{animation:parts-float var(--period) ease-in-out var(--delay) infinite alternate}
       @keyframes parts-float{to{transform:translate(-50%,-50%) translate(var(--dx),var(--dy)) rotate(calc(var(--tilt) + 10deg))}}
@@ -286,7 +286,7 @@
         <div class="orbit-ring" aria-hidden="true"></div>
         <button type="button" class="orbit-object" data-slot="0" aria-label="Bộ trò chơi" aria-haspopup="dialog" aria-controls="orbit-reader"><img src="assets/ban-choi-trong-suot.png" alt=""><span>Bộ trò chơi</span></button>
         <button type="button" class="orbit-object" data-slot="1" aria-label="Linh kiện" aria-haspopup="dialog" aria-controls="orbit-reader"><img src="assets/cards/A08.png" alt=""><span>Linh kiện</span></button>
-        <button type="button" class="orbit-object" data-slot="2" aria-label="Nhiệm vụ" aria-haspopup="dialog" aria-controls="orbit-reader"><img src="assets/missions/easy.png" alt=""><span>Nhiệm vụ</span></button>
+        <button type="button" class="orbit-object" data-slot="2" aria-label="Nhiệm vụ" aria-haspopup="dialog" aria-controls="orbit-reader"><img src="assets/missions/nhiem-vu-de.jpg" alt=""><span>Nhiệm vụ</span></button>
         <button type="button" class="orbit-object" data-slot="3" aria-label="Học cùng nhau" aria-haspopup="dialog" aria-controls="orbit-reader"><img src="hoc%20cung%20nhau.png" alt=""><span>Học cùng nhau</span></button>
       </div>
       <dialog id="orbit-reader" class="orbit-details" aria-labelledby="orbit-title"><button type="button" class="reader-close" aria-label="Đóng nội dung">×</button><img class="reader-image" alt="">
