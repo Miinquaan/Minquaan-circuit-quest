@@ -224,7 +224,11 @@
     .orbit-part{position:absolute;left:var(--x);top:var(--y);width:clamp(44px,7vw,104px);height:auto;opacity:1;transform:translate(-50%,-50%) rotate(var(--tilt));filter:drop-shadow(0 3px 5px #02101b70)}
     @media(prefers-reduced-motion:no-preference){
       .orbit-part{animation:parts-float var(--period) ease-in-out var(--delay) infinite alternate}
-      @keyframes parts-float{to{transform:translate(-50%,-50%) translate(var(--dx),var(--dy)) rotate(calc(var(--tilt) + 10deg))}}
+      @keyframes parts-float{
+        0%{transform:translate(-50%,-50%) translate(calc(-1 * var(--dx)),calc(-1 * var(--dy))) rotate(calc(var(--tilt) - 12deg))}
+        50%{transform:translate(-50%,-50%) translate(var(--dx),calc(-.6 * var(--dy))) rotate(var(--tilt))}
+        100%{transform:translate(-50%,-50%) translate(calc(2 * var(--dx)),calc(2 * var(--dy))) rotate(calc(var(--tilt) + 15deg))}
+      }
     }
     .orbit-object{isolation:isolate}
     </style>
