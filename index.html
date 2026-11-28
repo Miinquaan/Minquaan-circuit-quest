@@ -198,18 +198,19 @@
     .orbit-controls{display:flex;align-items:center;justify-content:center;gap:18px;border-bottom:1px solid #46707e;padding-bottom:14px}.orbit-controls button{cursor:pointer;background:#123647;border:1px solid #61939e;border-radius:50%;width:44px;height:44px;color:white;font-size:21px}
     .observatory button:focus-visible{outline:3px solid #8bffdf;outline-offset:3px}
     .kit-step>.kit-nav{box-sizing:border-box;width:52px;height:52px;display:grid;place-items:center;padding:0;border-radius:50%;font:600 27px/1 system-ui}
-    #kit-model{--w:min(54vw,360px);--d:calc(var(--w)*.18);perspective:1000px;touch-action:none;cursor:grab;background:radial-gradient(ellipse,#285466,#102941 70%)}
+    #kit-model{--w:min(54vw,360px);--length:calc(var(--w)*.98725);--d:calc(var(--w)*.19504);perspective:1000px;touch-action:none;cursor:grab;background:radial-gradient(ellipse,#285466,#102941 70%)}
     #kit-model:active{cursor:grabbing}#kit-model:focus-visible{outline:3px solid #89ffeb}
     .kit-box{position:relative;width:var(--w);height:var(--d);transform-style:preserve-3d;transform:rotateX(-48deg) rotateY(-18deg)}
     .kit-box i{position:absolute;inset:0;backface-visibility:hidden;background-color:#416a48;background-repeat:no-repeat}
-    .kit-box .box-lid,.kit-box .box-base{width:var(--w);height:var(--w);top:calc((var(--d) - var(--w))/2)}
+    .kit-box .box-lid,.kit-box .box-base{width:var(--w);height:var(--length);top:calc((var(--d) - var(--length))/2)}
     .box-lid{background-image:url('assets/hop-3d.jpg');background-size:100% 133.3333%;transform:rotateX(90deg) translateZ(calc(var(--d)/2))}
     .box-base{transform:rotateX(-90deg) translateZ(calc(var(--d)/2))}
-    .box-front,.box-right{background-image:url('assets/hop-3d.jpg');background-size:100% 800%}
-    .box-front{background-position:center 85.7143%;transform:translateZ(calc(var(--w)/2))}
-    .box-back{transform:rotateY(180deg) translateZ(calc(var(--w)/2))}
-    .box-right{background-position:center bottom;transform:rotateY(90deg) translateZ(calc(var(--w)/2))}
-    .box-left{transform:rotateY(-90deg) translateZ(calc(var(--w)/2))}
+    .box-front,.box-back,.box-right,.box-left{background-image:url('assets/hop-bon-mat-ben.jpg');background-size:100% 400%}
+    .kit-box .box-right,.kit-box .box-left{width:var(--length);left:calc((var(--w) - var(--length))/2)}
+    .box-front{background-position:center top;transform:translateZ(calc(var(--length)/2))}
+    .box-back{background-position:center 33.33333%;transform:rotateY(180deg) translateZ(calc(var(--length)/2))}
+    .box-right{background-position:center 66.66667%;transform:rotateY(90deg) translateZ(calc(var(--w)/2))}
+    .box-left{background-position:center bottom;transform:rotateY(-90deg) translateZ(calc(var(--w)/2))}
     .orbit-object{transition:none!important}.orbit-object[aria-pressed="true"] span{color:#89ffeb;outline:1px solid currentColor}
     .orbit-stage{cursor:grab;user-select:none;touch-action:pan-y;min-height:min(55vh,480px)}
     .orbit-stage.is-dragging,.orbit-stage.is-dragging button{cursor:grabbing}
@@ -320,7 +321,7 @@
         <div class="kit-media" id="kit-model" tabindex="0" role="group" aria-label="Hộp Circuit Quest 3D" aria-describedby="kit-model-hint">
           <div class="kit-box" aria-hidden="true"><i class="box-lid"></i><i class="box-base"></i><i class="box-front"></i><i class="box-back"></i><i class="box-left"></i><i class="box-right"></i></div>
         </div>
-        <p id="kit-model-hint">Kéo để xoay hộp hoặc dùng các phím mũi tên. Các mặt khuất được mô phỏng.</p>
+        <p id="kit-model-hint">Kéo để xoay hộp hoặc dùng các phím mũi tên.</p>
         <a class="kit-nav" href="#video-huong-dan" aria-label="Xem video hướng dẫn">→</a>
     </article>
   </section>
