@@ -211,6 +211,13 @@
     .box-right{background-position:center bottom;transform:rotateY(90deg) translateZ(calc(var(--w)/2))}
     .box-left{transform:rotateY(-90deg) translateZ(calc(var(--w)/2))}
     .orbit-object{transition:none!important}.orbit-object[aria-pressed="true"] span{color:#89ffeb;outline:1px solid currentColor}
+    .orbit-stage{cursor:grab;user-select:none;touch-action:pan-y;min-height:min(55vh,480px)}
+    .orbit-stage.is-dragging,.orbit-stage.is-dragging button{cursor:grabbing}
+    .orbit-object{background:none}
+    #orbit-reader{box-sizing:border-box;width:min(90vw,740px);max-height:88vh;max-height:88dvh;overflow:auto;margin:auto;padding:clamp(20px,4vw,42px);border:1px solid #54868e;border-radius:20px;background:#0b253c;color:#eef8ff}
+    #orbit-reader::backdrop{background:rgb(3 12 24 / .79)}
+    .reader-image{display:block;width:100%;height:clamp(145px,32vh,320px);object-fit:contain;pointer-events:none}
+    .reader-close{position:sticky;top:0;float:right;margin:0 0 -44px;width:44px;height:44px;border-radius:50%;border:1px solid #79a9b5;background:#143448;color:white;font-size:26px;cursor:pointer;z-index:1}
   </style>
 </head>
 <body>
@@ -250,16 +257,15 @@
   </section>
   <section id="gioi-thieu" data-project-panel aria-labelledby="orbit-title">
     <div class="observatory">
-      <header><h1 id="orbit-title">Circuit Quest</h1><p>Chọn một điểm trên quỹ đạo để khám phá bộ trò chơi.</p></header>
+      <header><h1 id="orbit-title">Circuit Quest</h1><p>Kéo để xoay quỹ đạo. Chọn một hình để xem gần và đọc giới thiệu.</p></header>
       <div class="orbit-stage" role="group" aria-label="Chủ đề giới thiệu">
         <div class="orbit-ring" aria-hidden="true"></div>
-        <button type="button" class="orbit-object" data-slot="0" aria-pressed="true" aria-controls="orbit-copy-0"><img src="assets/ban-choi-trong-suot.png" alt=""><span>Bộ trò chơi</span></button>
-        <button type="button" class="orbit-object" data-slot="1" aria-pressed="false" aria-controls="orbit-copy-1"><img src="assets/cards/A08.png" alt=""><span>Linh kiện</span></button>
-        <button type="button" class="orbit-object" data-slot="2" aria-pressed="false" aria-controls="orbit-copy-2"><img src="assets/missions/easy.png" alt=""><span>Nhiệm vụ</span></button>
-        <button type="button" class="orbit-object" data-slot="3" aria-pressed="false" aria-controls="orbit-copy-3"><img src="assets/cards/A14.png" alt=""><span>Học cùng nhau</span></button>
+        <button type="button" class="orbit-object" data-slot="0" aria-label="Bộ trò chơi" aria-haspopup="dialog" aria-controls="orbit-reader"><img src="assets/ban-choi-trong-suot.png" alt=""></button>
+        <button type="button" class="orbit-object" data-slot="1" aria-label="Linh kiện" aria-haspopup="dialog" aria-controls="orbit-reader"><img src="assets/cards/A08.png" alt=""></button>
+        <button type="button" class="orbit-object" data-slot="2" aria-label="Nhiệm vụ" aria-haspopup="dialog" aria-controls="orbit-reader"><img src="assets/missions/easy.png" alt=""></button>
+        <button type="button" class="orbit-object" data-slot="3" aria-label="Học cùng nhau" aria-haspopup="dialog" aria-controls="orbit-reader"><img src="assets/cards/A14.png" alt=""></button>
       </div>
-      <div class="orbit-details">
-        <div class="orbit-controls"><button type="button" id="orbit-prev" aria-label="Chủ đề trước">←</button><span id="orbit-count" aria-live="polite">1 / 4 · Bộ trò chơi</span><button type="button" id="orbit-motion" aria-label="Tạm dừng quỹ đạo">Ⅱ</button><button type="button" id="orbit-next" aria-label="Chủ đề sau">→</button></div>
+      <dialog id="orbit-reader" class="orbit-details" aria-labelledby="orbit-title"><button type="button" class="reader-close" aria-label="Đóng nội dung">×</button><img class="reader-image" alt="">
         <article id="orbit-copy-0"><h2>Học mạch điện qua từng nước đi</h2>
       <p>Circuit Quest là bộ trò chơi học tập kết hợp bàn chơi vật lý và công nghệ nhận diện thẻ linh kiện, giúp người học khám phá kiến thức mạch điện thông qua thao tác lắp ghép và giải quyết nhiệm vụ. Những kiến thức về nguồn điện, điện trở, đèn và dụng cụ đo được đưa vào trải nghiệm trực quan, nơi người chơi có thể tự mình lựa chọn, sắp xếp và tìm ra cách mắc mạch phù hợp.</p></article>
         <article id="orbit-copy-1" hidden><h2>Một bàn chơi, nhiều cách khám phá</h2>
@@ -270,7 +276,7 @@
       <p>Niềm vui không chỉ nằm ở việc hoàn thành thử thách, mà còn ở khoảnh khắc bạn hiểu vì sao mạch điện hoạt động như vậy.</p></article>
         <article id="orbit-copy-3" hidden><h2>Học chủ động, chơi cùng nhau</h2>
       <p>Circuit Quest được thiết kế hướng đến học sinh THPT, có thể sử dụng trong hoạt động học tập cá nhân, thảo luận nhóm hoặc trải nghiệm STEM. Người chơi cùng trao đổi ý tưởng, giải thích cách mắc mạch và phối hợp để hoàn thành nhiệm vụ; giáo viên có thêm một học cụ trực quan để tổ chức hoạt động vận dụng kiến thức.</p></article>
-      </div>
+      </dialog>
     </div>
   </section>
   <section id="luat-choi" data-project-panel aria-labelledby="rules-title">
@@ -369,11 +375,12 @@
       if (event.key === 'Escape') setPreview(null);
     });
     const orbitButtons = Array.from(document.querySelectorAll('.orbit-object'));
-    let selectedTopic = 0;
-    const motionButton = document.getElementById('orbit-motion');
-    const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
-    let paused = motionPreference.matches, phase = 0, last = 0, orbitFrame = 0;
     const intro = document.getElementById('gioi-thieu');
+    const stage = intro.querySelector('.orbit-stage');
+    const reader = document.getElementById('orbit-reader');
+    const picture = reader.querySelector('.reader-image');
+    const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+    let phase=0, last=0, orbitFrame=0, gesture=null, ignoreClick=false;
     function drawOrbit() {
       orbitButtons.forEach((button, i) => {
         const angle = phase + i * Math.PI / 2;
@@ -390,32 +397,61 @@
     }
     function syncMotion() {
       cancelAnimationFrame(orbitFrame); last=0;
-      motionButton.textContent = paused ? '▶' : 'Ⅱ';
-      motionButton.setAttribute('aria-label', paused ? 'Tiếp tục chuyển động quỹ đạo' : 'Tạm dừng quỹ đạo');
-      if (!paused && !intro.hidden && !document.hidden) orbitFrame=requestAnimationFrame(tick);
+      drawOrbit();
+      if (!motionPreference.matches && !intro.hidden && !document.hidden) orbitFrame=requestAnimationFrame(tick);
     }
-    motionButton.onclick=()=>{ paused=!paused; syncMotion(); };
-    motionPreference.addEventListener('change',()=>{paused=motionPreference.matches;syncMotion();});
+    motionPreference.addEventListener('change',syncMotion);
     document.addEventListener('visibilitychange',syncMotion);
-    function selectTopic(index) {
-      paused=true; syncMotion();
-      selectedTopic = (index + orbitButtons.length) % orbitButtons.length;
-      orbitButtons.forEach((button, i) => {
-        const selected = i === selectedTopic;
-
-        button.setAttribute('aria-pressed', String(selected));
-        document.getElementById(button.getAttribute('aria-controls')).hidden = !selected;
-      });
-      document.getElementById('orbit-count').textContent = (selectedTopic + 1) + ' / ' + orbitButtons.length + ' · ' + orbitButtons[selectedTopic].textContent.trim();
+    stage.addEventListener('pointerdown', e=>{
+      if (!e.isPrimary || e.button!==0) return;
+      ignoreClick=false;
+      gesture={id:e.pointerId,x:e.clientX,phase};
+    });
+    stage.addEventListener('pointermove', e=>{
+      if (gesture?.id!==e.pointerId) return;
+      const delta=e.clientX-gesture.x;
+      if (!ignoreClick && Math.abs(delta)<6) return;
+      ignoreClick=true;
+      stage.setPointerCapture(e.pointerId);
+      stage.classList.add('is-dragging');
+      phase=gesture.phase+delta*2*Math.PI/stage.clientWidth;
+      drawOrbit();
+    });
+    function endDrag(e){
+      if (gesture?.id!==e.pointerId) return;
+      gesture=null; stage.classList.remove('is-dragging');
     }
-    orbitButtons.forEach((button, index) => button.onclick = () => selectTopic(index));
-    document.getElementById('orbit-prev').onclick = () => selectTopic(selectedTopic - 1);
-    document.getElementById('orbit-next').onclick = () => selectTopic(selectedTopic + 1);
+    window.addEventListener('pointerup',endDrag);
+    window.addEventListener('pointercancel',endDrag);
+    orbitButtons.forEach((button,index)=>button.addEventListener('click', e=>{
+      if (ignoreClick && e.detail) return;
+      const image=button.querySelector('img');
+      const from=image.getBoundingClientRect();
+      picture.src=image.src;
+      reader.querySelectorAll('article').forEach((article,i)=>article.hidden=i!==index);
+      const heading=document.querySelector('#orbit-copy-'+index+' h2');
+      heading.id='orbit-heading-'+index;
+      reader.setAttribute('aria-labelledby',heading.id);
+      reader.showModal();
+      reader.scrollTop=0;
+      const to=picture.getBoundingClientRect();
+      if (!motionPreference.matches && to.width && to.height) {
+        const dx=from.left+from.width/2-to.left-to.width/2;
+        const dy=from.top+from.height/2-to.top-to.height/2;
+        picture.animate([{transform:'translate('+dx+'px,'+dy+'px) scale('+from.height/to.height+')'},{transform:'none'}],{duration:380,easing:'ease-out'});
+      }
+    }));
+    reader.querySelector('.reader-close').onclick=()=>reader.close();
+    reader.addEventListener('click',e=>{
+      const box=reader.getBoundingClientRect();
+      if (e.target===reader && (e.clientX<box.left || e.clientX>box.right || e.clientY<box.top || e.clientY>box.bottom)) reader.close();
+    });
     let previousPanel;
     function showSection() {
 
       setPreview(null);
       const current = panels.find(panel => '#' + panel.id === location.hash) || panels[0];
+      if (current !== intro && reader.open) reader.close();
       const kitSelector = '#bo-ban-choi,#video-huong-dan';
       current.classList.toggle('kit-enter', Boolean(previousPanel?.matches(kitSelector) && current.matches(kitSelector)));
       previousPanel = current;
